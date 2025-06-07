@@ -1,6 +1,8 @@
+import 'package:ecoguardian/shared/interface/it/locators/logger_locator.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  setUpLoggerLocator();
   runApp(const MyApp());
 }
 
