@@ -23,7 +23,7 @@ class CustomNavigationBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(32),
         ),
         child: Row(
-          spacing: 40,
+          spacing: 20,
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
