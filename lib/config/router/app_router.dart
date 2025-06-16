@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import 'package:ecoguardian/analytics/interface/screens/home_screen.dart';
 import 'package:ecoguardian/crm/interface/screens/consulting_screen.dart';
 import 'package:ecoguardian/iam/interface/screens/login_screen.dart';
@@ -8,21 +8,10 @@ import 'package:ecoguardian/payment/interface/screens/payments_screen.dart';
 import 'package:ecoguardian/planning/interface/screens/installation_screen.dart';
 import 'package:ecoguardian/profile/interface/screens/notifications_screen.dart';
 import 'package:ecoguardian/profile/interface/screens/profile_screen.dart';
-=======
 
->>>>>>> 0ad34e2 (feat(iam): implemented sign-in)
 import 'package:ecoguardian/shared/interface/widgets/main_wrapper.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../analytics/interface/screens/home_screen.dart';
-import '../../crm/interface/screens/consulting_screen.dart';
-import '../../iam/interface/screens/login_screen.dart';
-import '../../iam/interface/screens/register_screen.dart';
-import '../../monitoring/interface/screens/monitoring_screen.dart';
-import '../../payment/interface/screens/payments_screen.dart';
-import '../../planning/interface/screens/installation_screen.dart';
-import '../../profile/interface/screens/notifications_screen.dart';
-import '../../profile/interface/screens/profile_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
