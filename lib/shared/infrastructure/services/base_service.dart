@@ -6,12 +6,11 @@ import 'package:logger/logger.dart';
 abstract class BaseService<TRequest extends Serializable, TResponse>{
   final Dio _dio;
   final Logger logger = getIt<Logger>();
-  static const BASE_URL = "http://localhost:9080/api/v1/";
+  static const BASE_URL = "http://√:9080/api/v1/";
   final String resourcePath;
   final TResponse Function(Map<String, dynamic>) fromJson;
 
-  BaseService({
-    required this.fromJson,
+  BaseService(this.fromJson,{
     required this.resourcePath,
   }) : _dio = Dio(BaseOptions(
     baseUrl: BASE_URL,
@@ -33,6 +32,8 @@ abstract class BaseService<TRequest extends Serializable, TResponse>{
         'Error while calling GET $BASE_URL$resourcePath, status code: $statusCode, message: ${e.message}',
       );
       throw Exception('HTTP Error: $statusCode');
+    } catch (e){
+      throw Exception("Unknown exception: $e");
     }
   }
 
@@ -47,6 +48,8 @@ abstract class BaseService<TRequest extends Serializable, TResponse>{
         'Error while calling POST $BASE_URL$resourcePath, status code: $statusCode, message: ${e.message}',
       );
       throw Exception('HTTP Error: $statusCode');
+    }catch (e){
+      throw Exception("Unknown exception: $e");
     }
   }
 
@@ -61,6 +64,8 @@ abstract class BaseService<TRequest extends Serializable, TResponse>{
         'Error while calling PUT $BASE_URL$resourcePath, status code: $statusCode, message: ${e.message}',
       );
       throw Exception('HTTP Error: $statusCode');
+    }catch (e){
+      throw Exception("Unknown exception: $e");
     }
   }
 
@@ -75,6 +80,8 @@ abstract class BaseService<TRequest extends Serializable, TResponse>{
         'Error while calling DELETE $BASE_URL$resourcePath, status code: $statusCode, message: ${e.message}',
       );
       throw Exception('HTTP Error: $statusCode');
+    }catch (e){
+      throw Exception("Unknown exception: $e");
     }
   }
 
@@ -90,6 +97,8 @@ abstract class BaseService<TRequest extends Serializable, TResponse>{
         'Error while calling GET BY ID $BASE_URL$resourcePath, status code: $statusCode, message: ${e.message}',
       );
       throw Exception('HTTP Error: $statusCode');
+    }catch (e){
+      throw Exception("Unknown exception: $e");
     }
   }
 

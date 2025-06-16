@@ -1,10 +1,21 @@
 import 'package:ecoguardian/config/theme/app_theme.dart';
+<<<<<<< HEAD
 import 'package:ecoguardian/iam/interface/widgets/checkbox_remember.dart';
 import 'package:ecoguardian/iam/interface/widgets/email_field.dart';
 import 'package:ecoguardian/iam/interface/widgets/login_banner.dart';
+=======
+import 'package:ecoguardian/iam/interface/providers/auth_provider.dart';
+
+>>>>>>> 0ad34e2 (feat(iam): implemented sign-in)
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../widgets/checkbox_remember.dart';
+import '../widgets/email_field.dart';
+import '../widgets/login_banner.dart';
+import '../widgets/password_field.dart';
 
 import '../widgets/password_field.dart';
 
@@ -24,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-
+    final authProvider = context.watch<AuthProvider>();
     final double containerHeight = MediaQuery.of(context).size.height * 0.25;
     final double deviceWidth = MediaQuery.of(context).size.width;
     final Image logo = Image.asset(
@@ -82,8 +93,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 30),
                         ElevatedButton(
-                          onPressed: () {
-                            context.go('/home');
+                          onPressed: () async{
+                            try{
+                             final response = await authProvider.signIn(_emailController.text,_passwordController.text);
+                            } finally{
+                              context.go('/home');
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
