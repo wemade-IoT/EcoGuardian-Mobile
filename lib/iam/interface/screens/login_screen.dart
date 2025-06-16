@@ -1,11 +1,12 @@
 import 'package:ecoguardian/config/theme/app_theme.dart';
-import 'package:ecoguardian/ecoguardian/iam/interface/widgets/checkbox_remember.dart';
-import 'package:ecoguardian/ecoguardian/iam/interface/widgets/email_field.dart';
-import 'package:ecoguardian/ecoguardian/iam/interface/widgets/login_banner.dart';
-import 'package:ecoguardian/ecoguardian/iam/interface/widgets/password_field.dart';
+import 'package:ecoguardian/iam/interface/widgets/checkbox_remember.dart';
+import 'package:ecoguardian/iam/interface/widgets/email_field.dart';
+import 'package:ecoguardian/iam/interface/widgets/login_banner.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../widgets/password_field.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String name = 'login_screen';

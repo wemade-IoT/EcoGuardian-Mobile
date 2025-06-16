@@ -1,12 +1,12 @@
-import 'package:ecoguardian/ecoguardian/analytics/interface/screens/home_screen.dart';
-import 'package:ecoguardian/ecoguardian/consulting/interface/screens/consulting_screen.dart';
-import 'package:ecoguardian/ecoguardian/iam/interface/screens/login_screen.dart';
-import 'package:ecoguardian/ecoguardian/iam/interface/screens/register_screen.dart';
-import 'package:ecoguardian/ecoguardian/monitoring/interface/screens/monitoring_screen.dart';
-import 'package:ecoguardian/ecoguardian/payment/interface/screens/payments_screen.dart';
-import 'package:ecoguardian/ecoguardian/planning/interface/screens/installation_screen.dart';
-import 'package:ecoguardian/ecoguardian/profile/interface/screens/notifications_screen.dart';
-import 'package:ecoguardian/ecoguardian/profile/interface/screens/profile_screen.dart';
+import 'package:ecoguardian/analytics/interface/screens/home_screen.dart';
+import 'package:ecoguardian/crm/interface/screens/consulting_screen.dart';
+import 'package:ecoguardian/iam/interface/screens/login_screen.dart';
+import 'package:ecoguardian/iam/interface/screens/register_screen.dart';
+import 'package:ecoguardian/monitoring/interface/screens/monitoring_screen.dart';
+import 'package:ecoguardian/payment/interface/screens/payments_screen.dart';
+import 'package:ecoguardian/planning/interface/screens/installation_screen.dart';
+import 'package:ecoguardian/profile/interface/screens/notifications_screen.dart';
+import 'package:ecoguardian/profile/interface/screens/profile_screen.dart';
 import 'package:ecoguardian/shared/interface/widgets/main_wrapper.dart';
 import 'package:go_router/go_router.dart';
 
