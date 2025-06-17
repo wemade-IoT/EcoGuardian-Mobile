@@ -21,6 +21,7 @@ class MainTheme {
   static Color background = CustomColors.white;
 
   static ThemeData primaryTheme = ThemeData.light().copyWith(
+    scaffoldBackgroundColor: background,
     bottomAppBarTheme: BottomAppBarTheme(
       color: primary,
     ),

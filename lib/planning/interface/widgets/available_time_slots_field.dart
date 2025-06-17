@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ecoguardian/config/theme/app_theme.dart';
 
 class AvailableTimeSlotsField extends StatelessWidget {
   final String? selectedSlot;
@@ -26,8 +27,8 @@ class AvailableTimeSlotsField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Selecciona un horario de instalación:',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          'Select a time slot:',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: CustomColors.primary),
         ),
         const SizedBox(height: 16),
         Wrap(
@@ -39,12 +40,19 @@ class AvailableTimeSlotsField extends StatelessWidget {
               label: Text(slot),
               selected: isSelected,
               onSelected: (_) => onSlotSelected(slot),
-              selectedColor: Colors.green[200],
+              selectedColor: CustomColors.primary,
               labelStyle: TextStyle(
-                color: isSelected ? Colors.white : Colors.black,
+                color: isSelected ? Colors.white : CustomColors.darkGreen,
                 fontWeight: FontWeight.bold,
               ),
-              backgroundColor: Colors.grey[200],
+              backgroundColor: CustomColors.fieldGrey,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: isSelected ? CustomColors.primary : CustomColors.grey,
+                  width: 1.5,
+                ),
+              ),
             );
           }).toList(),
         ),
@@ -52,4 +60,3 @@ class AvailableTimeSlotsField extends StatelessWidget {
     );
   }
 }
-

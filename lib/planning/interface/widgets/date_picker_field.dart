@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ecoguardian/config/theme/app_theme.dart';
 
 class DatePickerField extends StatefulWidget {
   final DateTime? initialDate;
@@ -9,7 +10,7 @@ class DatePickerField extends StatefulWidget {
     super.key,
     this.initialDate,
     required this.onDateSelected,
-    this.label = 'Fecha',
+    this.label = 'Date',
   });
 
   @override
@@ -44,8 +45,8 @@ class _DatePickerFieldState extends State<DatePickerField> {
       initialDate: _selectedDate ?? now,
       firstDate: now,
       lastDate: DateTime(now.year + 5),
-      helpText: 'Selecciona la fecha',
-      locale: const Locale('es', ''),
+      helpText: 'Select a date',
+      locale: const Locale('en'),
     );
     if (picked != null) {
       setState(() {
@@ -58,16 +59,27 @@ class _DatePickerFieldState extends State<DatePickerField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _controller,
-      readOnly: true,
-      decoration: InputDecoration(
-        labelText: widget.label,
-        border: const OutlineInputBorder(),
-        suffixIcon: const Icon(Icons.calendar_today),
+    return Material(
+      child: TextField(
+        controller: _controller,
+        readOnly: true,
+        onTap: () => _pickDate(context),
+        decoration: InputDecoration(
+          labelText: widget.label,
+          labelStyle: const TextStyle(color: CustomColors.primary),
+          suffixIcon: const Icon(Icons.calendar_today, color: CustomColors.primary),
+          border: const OutlineInputBorder(),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: CustomColors.primary, width: 2),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: CustomColors.fieldGrey),
+          ),
+          fillColor: CustomColors.fieldGrey,
+          filled: true,
+        ),
+        style: const TextStyle(color: CustomColors.darkGreen),
       ),
-      onTap: () => _pickDate(context),
     );
   }
 }
-
