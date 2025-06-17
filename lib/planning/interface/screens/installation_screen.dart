@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ecoguardian/config/theme/app_theme.dart';
+import '../../domain/dto/order_request.dto.dart';
+import '../providers/order_provider.dart';
 import '../widgets/date_picker_field.dart';
 import '../widgets/available_time_slots_field.dart';
 
@@ -55,6 +57,51 @@ class _InstallationScreenState extends State<InstallationScreen> {
                       _selectedSlot = slot;
                     });
                   },
+                ),
+              ),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    // TODO: Replace with actual values from the app
+                    final order = OrderRequestDto(
+                      action: 'plant',
+                      consumerId: 1, // Replace with actual consumerId
+                      installationDate: _selectedDate ?? DateTime.now(),
+                      details: [
+                        OrderDetailDto(
+                          deviceId: 1,
+                          quantity: 1,
+                          unitPrice: 100.0,
+                          description: '',
+                          area: 10.0,
+                        ),
+                      ],
+                    );
+                    try {
+                      final provider = OrderProvider();
+                      await provider.createOrder(order);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Order created successfully!')),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Failed to create order: $e')),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Submit Order',
+                    style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
