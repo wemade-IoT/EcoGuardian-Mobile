@@ -1,3 +1,4 @@
+import 'package:ecoguardian/iam/domain/dto/user_authenticated_response.dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageHelper {

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:ecoguardian/shared/infrastructure/helpers/storage_helper.dart';
 import 'package:ecoguardian/shared/infrastructure/utils/serializable.dart';
 import 'package:ecoguardian/shared/interface/it/locators/logger_locator.dart';
 import 'package:logger/logger.dart';
@@ -6,6 +7,7 @@ import 'package:logger/logger.dart';
 abstract class BaseService<TRequest extends Serializable, TResponse>{
   final Dio _dio;
   final Logger logger = getIt<Logger>();
+  final String token ="";
   static const BASE_URL = "http://√:9080/api/v1/";
   final String resourcePath;
   final TResponse Function(Map<String, dynamic>) fromJson;
@@ -20,9 +22,19 @@ abstract class BaseService<TRequest extends Serializable, TResponse>{
     },
   ));
 
+  Future<String> getToken() async {
+    return await StorageHelper.getToken() ?? "";
+  }
+
   Future<List<TResponse>> getAll() async {
     try {
-      final response = await _dio.get(BASE_URL + resourcePath);
+      final token = await getToken();
+      Options options = Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      final response = await _dio.get(BASE_URL + resourcePath, options: options);
       final data = response.data as List;
       return data.map((resource) => fromJson(resource)).toList();
     } on DioException catch (e) {
@@ -39,7 +51,13 @@ abstract class BaseService<TRequest extends Serializable, TResponse>{
 
   Future<bool> post(TRequest request) async {
     try{
-      await _dio.post(BASE_URL + resourcePath, data: request.toRequest());
+      final token = await getToken();
+      Options options = Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      await _dio.post(BASE_URL + resourcePath, data: request.toRequest(), options: options);
       return true;
     } on DioException catch (e){
       final statusCode = e.response?.statusCode;
@@ -55,7 +73,13 @@ abstract class BaseService<TRequest extends Serializable, TResponse>{
 
   Future<bool> put(int id, TRequest request) async {
     try{
-      await _dio.put("$BASE_URL$resourcePath/$id", data: request.toRequest());
+      final token = await getToken();
+      Options options = Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      await _dio.put("$BASE_URL$resourcePath/$id", data: request.toRequest(), options: options);
       return true;
     } on DioException catch (e){
       final statusCode = e.response?.statusCode;
@@ -71,7 +95,13 @@ abstract class BaseService<TRequest extends Serializable, TResponse>{
 
   Future<bool> delete(int id) async {
     try{
-      await _dio.delete("$BASE_URL$resourcePath/$id");
+      final token = await getToken();
+      Options options = Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      await _dio.delete("$BASE_URL$resourcePath/$id", options: options);
       return true;
     } on DioException catch (e){
       final statusCode = e.response?.statusCode;
@@ -87,7 +117,13 @@ abstract class BaseService<TRequest extends Serializable, TResponse>{
 
   Future<TResponse> getById(int id) async {
     try{
-      final response = await _dio.get("$BASE_URL$resourcePath/$id");
+      final token = await getToken();
+      Options options = Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      final response = await _dio.get("$BASE_URL$resourcePath/$id", options: options);
       final data = response.data;
       return data;
     } on DioException catch (e){
