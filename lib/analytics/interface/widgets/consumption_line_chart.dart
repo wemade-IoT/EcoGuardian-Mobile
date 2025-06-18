@@ -70,10 +70,3 @@ class ConsumptionLineChart extends StatelessWidget {
   }
 }
 
-// Ejemplo de uso:
-// ConsumptionLineChart(
-//   waterData: [FlSpot(0, 10), FlSpot(1, 12), FlSpot(2, 8)],
-//   energyData: [FlSpot(0, 20), FlSpot(1, 18), FlSpot(2, 22)],
-//   labels: ['Lun', 'Mar', 'Mié'],
-// )
-
