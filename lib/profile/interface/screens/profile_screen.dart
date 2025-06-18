@@ -40,6 +40,64 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileHeader() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: CustomColors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(13),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              const CircleAvatar(
+                radius: 60,
+                backgroundImage: AssetImage('assets/images/user-placeholder.jpg'),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: CustomColors.teal,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: CustomColors.white,
+                    width: 2,
+                  ),
+                ),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.camera_alt,
+                    color: CustomColors.white,
+                    size: 20,
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'NTRMASTER',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: CustomColors.darkGreen,
+            ),
       ),
     );
   }
