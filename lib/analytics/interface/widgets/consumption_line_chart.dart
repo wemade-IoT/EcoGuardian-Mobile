@@ -1,0 +1,72 @@
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+
+class ConsumptionLineChart extends StatelessWidget {
+  final List<FlSpot> waterData;
+  final List<FlSpot> energyData;
+  final List<String> labels;
+
+  const ConsumptionLineChart({
+    super.key,
+    required this.waterData,
+    required this.energyData,
+    required this.labels,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.6,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: LineChart(
+          LineChartData(
+            gridData: FlGridData(show: true),
+            titlesData: FlTitlesData(
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: true, reservedSize: 40),
+              ),
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (value, meta) {
+                    int idx = value.toInt();
+                    if (idx >= 0 && idx < labels.length) {
+                      return Text(labels[idx], style: const TextStyle(fontSize: 12));
+                    }
+                    return const SizedBox.shrink();
+                  },
+                  interval: 1,
+                  reservedSize: 32,
+                ),
+              ),
+              rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            ),
+            borderData: FlBorderData(show: true),
+            lineBarsData: [
+              LineChartBarData(
+                spots: waterData,
+                isCurved: true,
+                color: Colors.blue,
+                barWidth: 3,
+                dotData: FlDotData(show: false),
+                belowBarData: BarAreaData(show: false),
+              ),
+              LineChartBarData(
+                spots: energyData,
+                isCurved: true,
+                color: Colors.green,
+                barWidth: 3,
+                dotData: FlDotData(show: false),
+                belowBarData: BarAreaData(show: false),
+              ),
+            ],
+            minY: 0,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
