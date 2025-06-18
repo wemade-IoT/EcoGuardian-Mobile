@@ -8,6 +8,12 @@ import 'package:flutter/cupertino.dart';
 
 class AuthProvider extends ChangeNotifier{
 
+  Map<String, dynamic> allowRoles = {
+     "Enterpise": true,
+    "Domestic": false,
+    "Admin": true,
+  };
+
   Future<void> signIn(String email, String password)async {
     final SignInRequestDto request = SignInRequestDto(email: email, password: password);
     final authService = AuthService();
@@ -16,6 +22,25 @@ class AuthProvider extends ChangeNotifier{
     await StorageHelper.saveToken(authenticatedResponseDto.token);
     await StorageHelper.saveUserId(authenticatedResponseDto.id);
 
+  }
+
+  Future<Map<String,dynamic>> getPayload() async{
+    final token = await StorageHelper.getToken();
+    final parts = token!.split('.');
+    if (parts.length != 3) {
+      throw Exception('Token inválido');
+    }
+    final payload = parts[1];
+    final normalized = base64.normalize(payload);
+    final payloadMap = json.decode(utf8.decode(base64Url.decode(normalized)));
+    return payloadMap;
+  }
+
+  Future<bool> isEnterprise() async{
+    final payload = await getPayload();
+    final role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+    print(role);
+    return allowRoles[role];
   }
 
 

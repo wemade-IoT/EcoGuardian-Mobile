@@ -65,5 +65,24 @@ class PlantProvider extends ChangeNotifier{
      return null;
    }
 
+   String? validateAreaCoverage(String value){
+     if (value.isEmpty){
+       return "Area coverage is required";
+     }
+     try {
+       int parsedValue = int.parse(value);
+       if (parsedValue == 0) {
+         return "Area coverage must be greater than 0";
+       }
+       else if (parsedValue > 2){
+         return "Area coverage cannot be greater than 2 km";
+       }
+     } catch (e) {
+       return "Please enter a valid number";
+     }
+
+     return null;
+   }
+
 
 }

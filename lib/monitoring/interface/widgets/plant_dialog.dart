@@ -27,16 +27,26 @@ class _PlantDialogState extends State<PlantDialog> {
   late TextEditingController waterThresholdController;
   late TextEditingController lightThresholdController;
   late TextEditingController temperatureThresholdController;
+  late TextEditingController areaCoverageController;
+  bool isEnterprise = false;
 
 
   @override
   void initState() {
     super.initState();
+    Future.microtask(() async {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final isEnterpriseResult = await authProvider.isEnterprise();
+      setState(() {
+        isEnterprise = isEnterpriseResult;
+      });
+    });
     nameController = TextEditingController();
     typeController = TextEditingController();
     waterThresholdController = TextEditingController();
     lightThresholdController = TextEditingController();
     temperatureThresholdController = TextEditingController();
+    areaCoverageController = TextEditingController();
 
     if (widget.plant != null) {
       nameController.text = widget.plant!.name;
@@ -44,8 +54,10 @@ class _PlantDialogState extends State<PlantDialog> {
       waterThresholdController.text = widget.plant!.waterThreshold.toString();
       lightThresholdController.text = widget.plant!.lightThreshold.toString();
       temperatureThresholdController.text = widget.plant!.temperatureThreshold.toString();
+      areaCoverageController.text = widget.plant!.areaCoverage.toString();
     }
   }
+
 
   @override
   void dispose(){
@@ -58,6 +70,7 @@ class _PlantDialogState extends State<PlantDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
     final plantProvider = context.watch<PlantProvider>();
     return AlertDialog(
       title: Column(
@@ -115,6 +128,14 @@ class _PlantDialogState extends State<PlantDialog> {
                           return plantProvider.validateThresholds(temperatureThresholdController.text);
                         },
                       ),
+                       isEnterprise ? CustomTextField(
+                          controller: areaCoverageController,
+                          hintText: "Give Area coverage (KM)",
+                          label: "Area coverage",
+                          onValidate:(_){
+                            return plantProvider.validateAreaCoverage(areaCoverageController.text);
+                          },
+                        ) : Container(),
                       SizedBox(
                         width: double.infinity,
                         child: CustomElevatedButton(
@@ -125,7 +146,7 @@ class _PlantDialogState extends State<PlantDialog> {
                                      id: widget.plant!.id,
                                      type: typeController.text,
                                      isPlantation: widget.plant!.isPlantation,
-                                     areaCoverage: widget.plant!.areaCoverage,
+                                     areaCoverage: !isEnterprise ? 0 : int.parse(areaCoverageController.text) ,
                                      userId:widget.plant!.userId,
                                      waterThreshold: int.parse(waterThresholdController.text),
                                      temperatureThreshold: int.parse(temperatureThresholdController.text),
@@ -162,7 +183,7 @@ class _PlantDialogState extends State<PlantDialog> {
                                     id: 0,
                                     type: typeController.text,
                                     isPlantation: false,
-                                    areaCoverage: 0,
+                                    areaCoverage: !isEnterprise ? 0 : int.parse(areaCoverageController.text) ,
                                     userId: userId!,
                                     waterThreshold: int.parse(waterThresholdController.text),
                                     temperatureThreshold: int.parse(temperatureThresholdController.text),
