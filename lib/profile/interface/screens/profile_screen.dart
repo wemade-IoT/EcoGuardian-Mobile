@@ -98,6 +98,90 @@ class ProfileScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: CustomColors.darkGreen,
             ),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'alex.johnson@example.com',
+            style: TextStyle(
+              fontSize: 16,
+              color: CustomColors.grey,
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUserDetailsSection() {
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        children: [
+          const Text(
+            'User Details',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: CustomColors.darkGreen,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: CustomColors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withAlpha(13),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                _buildDetailRow(
+                  label: 'User:',
+                  value: 'NTRMASTER',
+                  icon: Icons.person,
+                ),
+                const Divider(height: 24),
+                _buildDetailRow(
+                  label: 'Profile:',
+                  value: 'Domestic',
+                  icon: Icons.badge,
+                ),
+                const Divider(height: 24),
+                _buildDetailRow(
+                  label: 'Name:',
+                  value: 'Alex Johnson',
+                  icon: Icons.person_outline,
+                  isEditable: true,
+                ),
+                const Divider(height: 24),
+                _buildDetailRow(
+                  label: 'Email:',
+                  value: 'alex.johnson@example.com',
+                  icon: Icons.email_outlined,
+                ),
+                const Divider(height: 24),
+                _buildDetailRow(
+                  label: 'Account Type:',
+                  value: 'Generic Subcription',
+                  icon: Icons.verified_user_outlined,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
       ),
     );
   }
