@@ -8,11 +8,4 @@ class AuthenticatedResponseDto {
         email = json['email'],
         token = json['token'];
 
-  toResponse(Map<String, dynamic> json){
-    return {
-        id : json['id'],
-        email : json['email'],
-        token : json['token']
-    };
-  }
 }

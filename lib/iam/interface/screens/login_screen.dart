@@ -3,6 +3,7 @@ import 'package:ecoguardian/iam/interface/widgets/checkbox_remember.dart';
 import 'package:ecoguardian/iam/interface/widgets/email_field.dart';
 import 'package:ecoguardian/iam/interface/widgets/login_banner.dart';
 import 'package:ecoguardian/iam/interface/providers/auth_provider.dart';
+import 'package:ecoguardian/public/interface/widgets/custom_dialog.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -48,7 +49,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   deviceWidth: deviceWidth,
                   logoImage: logo,
                 ),
-                const SizedBox(height: 90),
                 Expanded(
                   child: SizedBox(
                     width: deviceWidth * 0.85,
@@ -63,32 +63,48 @@ class _LoginScreenState extends State<LoginScreen> {
                             letterSpacing: 1.5,
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 20),
                         EmailField(emailController: _emailController),
                         const SizedBox(height: 25),
                         PasswordField(passwordController: _passwordController),
-                        const SizedBox(height: 10),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RememberCheckbox(),
-                            Text(
-                              "Forgot password?",
-                              style: TextStyle(
-                                fontSize: 14.5,
-                                fontStyle: FontStyle.normal,
-                                color: CustomColors.darkGreen,
-                              ),
-                            ),
-                          ],
-                        ),
                         const SizedBox(height: 30),
                         ElevatedButton(
                           onPressed: () async{
                             try{
-                             final response = await authProvider.signIn(_emailController.text,_passwordController.text);
-                            } finally{
-                              context.go('/home');
+                              await authProvider.signIn(_emailController.text,_passwordController.text);
+                              await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context){
+                                    return CustomDialog(
+                                        title: "Welcome to EcoGuardian!",
+                                        content: "",
+                                        isSuccess: true,
+                                      onConfirm: () {
+                                        context.go('/home');
+                                      },
+                                      onCancel: () {
+                                        context.go('/home');
+                                      },
+                                    );
+                                  }
+                              );
+                            } catch (e){
+                              await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context){
+                                    return CustomDialog(
+                                        title: "An error has ocurred",
+                                        content: "Check your credentials and try again",
+                                        isSuccess: false,
+                                      onConfirm: () {
+                                          Navigator.pop(context);
+                                      },
+                                      onCancel: () {
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  }
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -110,10 +126,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        Expanded(child: Container(color: Colors.transparent)),
-                        const _NotAccountText(),
-                        const SizedBox(height: 15),
                       ],
                     ),
                   ),
@@ -127,37 +139,3 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class _NotAccountText extends StatelessWidget {
-  const _NotAccountText();
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      textAlign: TextAlign.start,
-      text: TextSpan(
-        style: const TextStyle(
-          fontSize: 18,
-          fontStyle: FontStyle.normal,
-          letterSpacing: 0.8,
-          color: Colors.black,
-        ),
-        children: [
-          const TextSpan(
-            text: "Don't have an account? ",
-          ),
-          TextSpan(
-            text: 'Sign up',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: CustomColors.teal,
-            ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                context.push('/register');
-              },
-          ),
-        ],
-      ),
-    );
-  }
-}

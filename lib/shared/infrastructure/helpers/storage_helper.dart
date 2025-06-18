@@ -14,11 +14,6 @@ class StorageHelper {
     return !isValidToken(token);
   }
 
-  // replace dynamic with a specific user entityyy
-  static Future<void> saveUser (dynamic user) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user', user.toString());
-  }
 
   // same as above boe
   static Future<dynamic> getUser() async {
@@ -26,6 +21,16 @@ class StorageHelper {
     final user = prefs.getString('user');
     if (user != null) return user;
     return null;
+  }
+
+  static Future<void> saveUserId(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt("id",id);
+  }
+
+  static Future<int?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt("id");
   }
 
   static Future<void> saveToken(String token) async {

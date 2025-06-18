@@ -1,6 +1,7 @@
 import 'package:ecoguardian/config/router/app_router.dart';
 import 'package:ecoguardian/config/theme/app_theme.dart';
 import 'package:ecoguardian/iam/interface/providers/auth_provider.dart';
+import 'package:ecoguardian/monitoring/interface/providers/plant_provider.dart';
 import 'package:ecoguardian/shared/interface/it/locators/logger_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider())
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => PlantProvider())
       ],
       child: MaterialApp.router(
         title: 'Flutter Demo',

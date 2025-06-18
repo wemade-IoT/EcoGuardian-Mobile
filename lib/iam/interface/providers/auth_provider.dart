@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ecoguardian/iam/domain/dto/sign_in_request.dto.dart';
 import 'package:ecoguardian/iam/domain/dto/user_authenticated_response.dto.dart';
 import 'package:ecoguardian/iam/infrastructure/services/auth.service.dart';
@@ -12,9 +14,11 @@ class AuthProvider extends ChangeNotifier{
     final response = await authService.signIn(request);
     final AuthenticatedResponseDto authenticatedResponseDto = AuthenticatedResponseDto.fromJson(response);
     await StorageHelper.saveToken(authenticatedResponseDto.token);
-    await StorageHelper.saveUser(authenticatedResponseDto.toResponse(response));
+    await StorageHelper.saveUserId(authenticatedResponseDto.id);
 
   }
+
+
 
 
 }
