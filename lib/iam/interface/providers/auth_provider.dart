@@ -18,6 +18,7 @@ class AuthProvider extends ChangeNotifier{
     final SignInRequestDto request = SignInRequestDto(email: email, password: password);
     final authService = AuthService();
     final response = await authService.signIn(request);
+    print(response);
     final AuthenticatedResponseDto authenticatedResponseDto = AuthenticatedResponseDto.fromJson(response);
     await StorageHelper.saveToken(authenticatedResponseDto.token);
     await StorageHelper.saveUserId(authenticatedResponseDto.id);

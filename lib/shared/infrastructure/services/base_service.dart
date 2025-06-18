@@ -4,20 +4,19 @@ import 'package:ecoguardian/shared/infrastructure/utils/serializable.dart';
 import 'package:ecoguardian/shared/interface/it/locators/logger_locator.dart';
 import 'package:logger/logger.dart';
 
+import '../../../config/constants/constant.dart';
+
 abstract class BaseService<TRequest extends Serializable>{
   final Dio _dio;
   final Logger logger = getIt<Logger>();
   final String token ="";
-  static const _BASE_URL = "http://10.0.2.2:9080/api/v1/";
   final String resourcePath;
-
-  get BASE_URL  => _BASE_URL;
   get dio => _dio;
 
   BaseService({
     required this.resourcePath,
   }) : _dio = Dio(BaseOptions(
-    baseUrl: _BASE_URL,
+    baseUrl: Constant.baseUrl,
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -36,14 +35,14 @@ abstract class BaseService<TRequest extends Serializable>{
           'Authorization': 'Bearer $token',
         },
       );
-      final response = await _dio.get(BASE_URL + resourcePath, options: options);
+      final response = await _dio.get(Constant.baseUrl + resourcePath, options: options);
       final data = response.data;
       return data;
     } on DioException catch (e) {
       final statusCode = e.response?.statusCode;
       logger.log(
         Level.error,
-        'Error while calling GET $BASE_URL$resourcePath, status code: $statusCode, message: ${e.message}',
+        'Error while calling GET ${Constant.baseUrl}$resourcePath, status code: $statusCode, message: ${e.message}',
       );
       throw Exception('HTTP Error: $statusCode');
     } catch (e){
@@ -59,13 +58,13 @@ abstract class BaseService<TRequest extends Serializable>{
           'Authorization': 'Bearer $token',
         },
       );
-      await _dio.post(BASE_URL + resourcePath, data: request.toRequest(), options: options);
+      await _dio.post(Constant.baseUrl + resourcePath, data: request.toRequest(), options: options);
       return true;
     } on DioException catch (e){
       final statusCode = e.response?.statusCode;
       logger.log(
         Level.error,
-        'Error while calling POST $BASE_URL$resourcePath, status code: $statusCode, message: ${e.message}',
+        'Error while calling POST ${Constant.baseUrl}$resourcePath, status code: $statusCode, message: ${e.message}',
       );
       throw Exception('HTTP Error: $statusCode');
     }catch (e){
@@ -81,13 +80,13 @@ abstract class BaseService<TRequest extends Serializable>{
           'Authorization': 'Bearer $token',
         },
       );
-      await _dio.put("$BASE_URL$resourcePath/$id", data: request.toRequest(), options: options);
+      await _dio.put("${Constant.baseUrl}$resourcePath/$id", data: request.toRequest(), options: options);
       return true;
     } on DioException catch (e){
       final statusCode = e.response?.statusCode;
       logger.log(
         Level.error,
-        'Error while calling PUT $BASE_URL$resourcePath, status code: $statusCode, message: ${e.message}',
+        'Error while calling PUT ${Constant.baseUrl}$resourcePath, status code: $statusCode, message: ${e.message}',
       );
       throw Exception('HTTP Error: $statusCode');
     }catch (e){
@@ -103,13 +102,13 @@ abstract class BaseService<TRequest extends Serializable>{
           'Authorization': 'Bearer $token',
         },
       );
-      await _dio.delete("$BASE_URL$resourcePath/$id", options: options);
+      await _dio.delete("${Constant.baseUrl}$resourcePath/$id", options: options);
       return true;
     } on DioException catch (e){
       final statusCode = e.response?.statusCode;
       logger.log(
         Level.error,
-        'Error while calling DELETE $BASE_URL$resourcePath, status code: $statusCode, message: ${e.message}',
+        'Error while calling DELETE ${Constant.baseUrl}$resourcePath, status code: $statusCode, message: ${e.message}',
       );
       throw Exception('HTTP Error: $statusCode');
     }catch (e){
@@ -125,14 +124,14 @@ abstract class BaseService<TRequest extends Serializable>{
           'Authorization': 'Bearer $token',
         },
       );
-      final response = await _dio.get("$BASE_URL$resourcePath/$id", options: options);
+      final response = await _dio.get("${Constant.baseUrl}$resourcePath/$id", options: options);
       final data = response.data;
       return data;
     } on DioException catch (e){
       final statusCode = e.response?.statusCode;
       logger.log(
         Level.error,
-        'Error while calling GET BY ID $BASE_URL$resourcePath, status code: $statusCode, message: ${e.message}',
+        'Error while calling GET BY ID ${Constant.baseUrl}$resourcePath, status code: $statusCode, message: ${e.message}',
       );
       throw Exception('HTTP Error: $statusCode');
     }catch (e){

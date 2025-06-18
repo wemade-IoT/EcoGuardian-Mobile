@@ -70,6 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 30),
                         ElevatedButton(
                           onPressed: () async{
+                            print("Hellooo");
                             try{
                               await authProvider.signIn(_emailController.text,_passwordController.text);
                               await showDialog(
@@ -89,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   }
                               );
                             } catch (e){
+                              print("Hello 2: ${e}");
                               await showDialog(
                                   context: context,
                                   builder: (BuildContext context){

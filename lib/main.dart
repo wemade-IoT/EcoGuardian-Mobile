@@ -10,10 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  setUpLoggerLocator();
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => PlantProvider()),
         ChangeNotifierProvider(create: (_) => PlantMetricsProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider())
       ],
       child: const MyApp(),
     ),

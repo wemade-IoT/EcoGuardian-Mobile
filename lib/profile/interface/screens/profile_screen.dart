@@ -9,20 +9,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'My Profile',
-          style: TextStyle(color: CustomColors.white, fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, color: CustomColors.white),
-            onPressed: () {},
-          ),
-        ],
-        backgroundColor: CustomColors.darkGreen,
-        elevation: 0,
-      ),
       backgroundColor: CustomColors.lightGrey,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -93,7 +79,7 @@ class ProfileScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           const Text(
-            'NTRMASTER',
+            'Alex Johnson',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -147,7 +133,7 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 _buildDetailRow(
                   label: 'User:',
-                  value: 'NTRMASTER',
+                  value: 'Alex Johnson',
                   icon: Icons.person,
                 ),
                 const Divider(height: 24),

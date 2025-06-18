@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:ecoguardian/analytics/domain/dto/plant_metrics.dto.dart';
 
+import '../../../config/constants/constant.dart';
+
 class PlantMetricsService {
-  static const String BASE_URL = "http://localhost:9080/api/v1/";
   final Dio _dio;
 
   PlantMetricsService() : _dio = Dio(BaseOptions(
-    baseUrl: BASE_URL,
+    baseUrl: Constant.baseUrl,
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',

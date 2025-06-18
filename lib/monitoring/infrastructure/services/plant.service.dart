@@ -3,6 +3,8 @@ import 'package:ecoguardian/monitoring/domain/dto/plant.dto.dart';
 import 'package:ecoguardian/shared/infrastructure/services/base_service.dart';
 import 'package:logger/logger.dart';
 
+import '../../../config/constants/constant.dart';
+
 class PlantService extends BaseService{
   PlantService({required super.resourcePath});
 
@@ -15,7 +17,7 @@ class PlantService extends BaseService{
         },
       );
       final response = await dio.get(
-        BASE_URL + resourcePath + "?userId=" + userId.toString(),
+        Constant.baseUrl + resourcePath + "?userId=" + userId.toString(),
         options: options,
       );
       final List<dynamic> plants = response.data;
@@ -24,7 +26,7 @@ class PlantService extends BaseService{
       final statusCode = e.response?.statusCode;
       logger.log(
         Level.error,
-        'Error while calling GET $BASE_URL$resourcePath, status code: $statusCode, message: ${e.message}',
+        'Error while calling GET ${Constant.baseUrl}$resourcePath, status code: $statusCode, message: ${e.message}',
       );
       throw Exception('HTTP Error: $statusCode');
     } catch (e) {
