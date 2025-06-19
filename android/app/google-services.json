@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "929000598468",
+    "project_id": "ecoguardian-5b998",
+    "storage_bucket": "ecoguardian-5b998.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929000598468:android:02c1b82419a7037d64d291",
+        "android_client_info": {
+          "package_name": "com.example.ecoguardian"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBU0uu2zrXiTPoZxm5CcjonhDmCOsQUZsQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
