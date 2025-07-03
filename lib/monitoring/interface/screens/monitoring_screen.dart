@@ -19,17 +19,10 @@ class MonitoringScreen extends StatefulWidget {
 
 class _MonitoringScreenState extends State<MonitoringScreen> {
 
-  void _loadPlants()  {
-    ()async{
-      final plantProvider = context.read<PlantProvider>();
-      await plantProvider.getPlantsByUserId(1);
-    }();
-  }
 
   @override
   void initState(){
     super.initState();
-    _loadPlants();
   }
   @override
   Widget build(BuildContext context) {

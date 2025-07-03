@@ -8,11 +8,6 @@ import 'package:flutter/cupertino.dart';
 
 class AuthProvider extends ChangeNotifier{
 
-  Map<String, dynamic> allowRoles = {
-     "Enterpise": true,
-    "Domestic": false,
-    "Admin": true,
-  };
 
   Future<void> signIn(String email, String password)async {
     final SignInRequestDto request = SignInRequestDto(email: email, password: password);
@@ -40,10 +35,23 @@ class AuthProvider extends ChangeNotifier{
 
   Future<bool> isEnterprise() async{
     final payload = await getPayload();
-    final role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-    print(role);
-    return allowRoles[role];
+    final role = payload["role"];
+    return role == "Business";
   }
+
+  Future<bool> isAdmin() async{
+    final payload = await getPayload();
+    final role = payload["role"];
+    return role == "Admin";
+  }
+
+  Future<bool> isSpecialist() async{
+    final payload = await getPayload();
+    final role = payload["role"];
+    return role == "Specialist";
+  }
+
+
 
 
 

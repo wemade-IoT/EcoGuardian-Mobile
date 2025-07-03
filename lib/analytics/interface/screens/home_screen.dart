@@ -1,3 +1,4 @@
+import 'package:ecoguardian/monitoring/interface/providers/plant_provider.dart';
 import 'package:ecoguardian/profile/interface/providers/notification_provider.dart';
 import 'package:ecoguardian/profile/interface/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Future.microtask(() => Provider.of<PlantMetricsProvider>(context, listen: false).fetchMetrics());
+    Future.microtask(() => Provider.of<PlantProvider>(context, listen: false).getPlantsByUserId());
     Future.microtask(() => Provider.of<NotificationProvider>(context, listen: false).getNotificationsByUserId());
     Future.microtask(() => Provider.of<ProfileProvider>(context, listen: false).getProfileByEmail());
   }

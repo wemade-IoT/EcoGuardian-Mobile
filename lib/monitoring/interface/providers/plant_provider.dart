@@ -1,5 +1,6 @@
 import 'package:ecoguardian/monitoring/domain/dto/plant.dto.dart';
 import 'package:ecoguardian/monitoring/infrastructure/services/plant.service.dart';
+import 'package:ecoguardian/shared/infrastructure/helpers/storage_helper.dart';
 import 'package:ecoguardian/shared/infrastructure/utils/serializable.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,8 +10,9 @@ class PlantProvider extends ChangeNotifier{
    PlantService plantService = PlantService(resourcePath: "plant");
    get plants => _plants;
 
-   Future<void> getPlantsByUserId(int userId) async{
-      final data = await plantService.getPlantsByUserId(userId);
+   Future<void> getPlantsByUserId() async{
+     final userId = await StorageHelper.getUserId();
+      final data = await plantService.getPlantsByUserId(userId!);
        _plants = data;
        notifyListeners();
    }
