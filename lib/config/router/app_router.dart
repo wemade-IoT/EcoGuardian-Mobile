@@ -4,8 +4,6 @@ import 'package:ecoguardian/crm/interface/screens/consulting_screen.dart';
 import 'package:ecoguardian/iam/interface/screens/login_screen.dart';
 import 'package:ecoguardian/iam/interface/screens/register_screen.dart';
 import 'package:ecoguardian/monitoring/interface/screens/monitoring_screen.dart';
-import 'package:ecoguardian/monitoring/interface/screens/plant_information_screen.dart';
-import 'package:ecoguardian/payment/interface/screens/payments_screen.dart';
 import 'package:ecoguardian/planning/interface/screens/installation_screen.dart';
 import 'package:ecoguardian/profile/interface/screens/notifications_screen.dart';
 import 'package:ecoguardian/profile/interface/screens/profile_screen.dart';
@@ -54,14 +52,6 @@ final appRouter = GoRouter(
           pageBuilder: (context, state) => NoTransitionPage(
             key: state.pageKey,
             child: const ConsultingScreen(),
-          ),
-        ),
-        GoRoute(
-          path: '/payments',
-          name: PaymentsScreen.name,
-          pageBuilder: (context, state) => NoTransitionPage(
-            key: state.pageKey,
-            child: const PaymentsScreen(),
           ),
         ),
         GoRoute(

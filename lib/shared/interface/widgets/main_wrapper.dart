@@ -1,8 +1,10 @@
 import 'package:ecoguardian/config/constants/constant.dart';
 import 'package:ecoguardian/config/theme/app_theme.dart';
+import 'package:ecoguardian/profile/interface/providers/profile_provider.dart';
 import 'package:ecoguardian/shared/interface/widgets/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class MainWrapper extends StatefulWidget {
   final Widget? child;
@@ -40,6 +42,7 @@ class _MainWrapperState extends State<MainWrapper> {
   @override
   Widget build(BuildContext context) {
     final scaffoldKey = GlobalKey<ScaffoldState>();
+    final profileProvider = context.watch<ProfileProvider>();
 
     final routeIndexMap = {
       Constant.homePath: 0,
@@ -89,8 +92,9 @@ class _MainWrapperState extends State<MainWrapper> {
                 child: CircleAvatar(
                   radius: 24.0,
                   backgroundColor: Colors.white.withOpacity(0.2),
-                  backgroundImage: const NetworkImage(
-                    'https://avatars.githubusercontent.com/u/129230632?v=4',
+                  backgroundImage: NetworkImage(
+                  profileProvider.profile != null ?   profileProvider.profile.avatarUrl
+                    : "https://www.pngitem.com/pimgs/m/421-4212617_person-placeholder-image-transparent-hd-png-download.png",
                   ),
                 ),
               ),

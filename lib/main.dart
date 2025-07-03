@@ -1,3 +1,5 @@
+import 'package:ecoguardian/profile/interface/providers/notification_provider.dart';
+import 'package:ecoguardian/profile/interface/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ecoguardian/config/router/app_router.dart';
@@ -16,7 +18,9 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => PlantProvider()),
         ChangeNotifierProvider(create: (_) => PlantMetricsProvider()),
-        ChangeNotifierProvider(create: (_) => AuthProvider())
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider())
       ],
       child: const MyApp(),
     ),

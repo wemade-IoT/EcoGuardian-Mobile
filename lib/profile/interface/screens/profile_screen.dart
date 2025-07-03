@@ -1,5 +1,7 @@
 import 'package:ecoguardian/config/theme/app_theme.dart';
+import 'package:ecoguardian/profile/interface/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   static const String name = 'profile_screen';
@@ -11,6 +13,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: CustomColors.lightGrey,
       body: SafeArea(
+        bottom: true,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Center(
@@ -19,11 +22,12 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _buildProfileHeader(),
+                  _buildProfileHeader(context),
                   const SizedBox(height: 24),
-                  _buildUserDetailsSection(),
+                  _buildUserDetailsSection(context),
                   const SizedBox(height: 24),
                   _buildSubscriptionSection(),
+                  const SizedBox(height: 70),
                 ],
               ),
             ),
@@ -33,7 +37,9 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(BuildContext context) {
+    final profileProvider = context.watch<ProfileProvider>();
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -53,9 +59,12 @@ class ProfileScreen extends StatelessWidget {
           Stack(
             alignment: Alignment.bottomRight,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 60,
-                backgroundImage: AssetImage('assets/images/user-placeholder.jpg'),
+                backgroundImage: NetworkImage(
+                  profileProvider.profile != null ?   profileProvider.profile.avatarUrl
+                      : "https://www.pngitem.com/pimgs/m/421-4212617_person-placeholder-image-transparent-hd-png-download.png",
+                ),
               ),
               Container(
                 decoration: BoxDecoration(
@@ -78,8 +87,9 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          const Text(
-            'Alex Johnson',
+          Text(
+            profileProvider.profile != null ?
+            profileProvider.profile.name : 'Alex Johnson',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -87,7 +97,9 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
+          Text(
+            profileProvider.profile != null ?
+            profileProvider.profile.email :
             'alex.johnson@example.com',
             style: TextStyle(
               fontSize: 16,
@@ -100,7 +112,14 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildUserDetailsSection() {
+  Widget _buildUserDetailsSection(BuildContext context) {
+    final profileProvider = context.watch<ProfileProvider>();
+    final Map<int,String> types = {
+      1: "Admin",
+      2:"Domestic",
+      3: "Business",
+      4: "Specialist",
+    };
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -133,26 +152,35 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 _buildDetailRow(
                   label: 'User:',
-                  value: 'Alex Johnson',
+                  value:
+                  profileProvider.profile != null ?
+                  profileProvider.profile.name :
+                  'Alex Johnson',
                   icon: Icons.person,
                 ),
                 const Divider(height: 24),
                 _buildDetailRow(
                   label: 'Profile:',
-                  value: 'Domestic',
+                  value: profileProvider.profile != null ?
+                  types[profileProvider.profile.subscriptionId]! : "Not given",
                   icon: Icons.badge,
                 ),
                 const Divider(height: 24),
                 _buildDetailRow(
                   label: 'Name:',
-                  value: 'Alex Johnson',
+                  value:
+                  profileProvider.profile != null ?
+                  profileProvider.profile.name:
+                  'Alex Johnson',
                   icon: Icons.person_outline,
                   isEditable: true,
                 ),
                 const Divider(height: 24),
                 _buildDetailRow(
                   label: 'Email:',
-                  value: 'alex.johnson@example.com',
+                  value:  profileProvider.profile != null ?
+                  profileProvider.profile.email:
+                  'alex.johnson@example.com',
                   icon: Icons.email_outlined,
                 ),
                 const Divider(height: 24),
@@ -257,44 +285,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 16),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Renewal Date:',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: CustomColors.grey,
-                      ),
-                    ),
-                    Text(
-                      'November 2025',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: CustomColors.darkGreen,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: CustomColors.teal,
-                      foregroundColor: CustomColors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text('Manage Subscription'),
-                  ),
-                ),
+                )
               ],
             ),
           ),

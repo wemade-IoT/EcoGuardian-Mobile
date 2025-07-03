@@ -22,6 +22,7 @@ class AuthProvider extends ChangeNotifier{
     final AuthenticatedResponseDto authenticatedResponseDto = AuthenticatedResponseDto.fromJson(response);
     await StorageHelper.saveToken(authenticatedResponseDto.token);
     await StorageHelper.saveUserId(authenticatedResponseDto.id);
+    await StorageHelper.saveEmail(authenticatedResponseDto.email);
 
   }
 

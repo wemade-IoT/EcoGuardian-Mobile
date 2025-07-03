@@ -116,7 +116,7 @@ abstract class BaseService<TRequest extends Serializable>{
     }
   }
 
-  Future<Map<String,dynamic>> getById(int id) async {
+  Future<Map<String,dynamic>> getById(String id) async {
     try{
       final token = await getToken();
       Options options = Options(
@@ -126,6 +126,30 @@ abstract class BaseService<TRequest extends Serializable>{
       );
       final response = await _dio.get("${Constant.baseUrl}$resourcePath/$id", options: options);
       final data = response.data;
+      return data;
+    } on DioException catch (e){
+      final statusCode = e.response?.statusCode;
+      logger.log(
+        Level.error,
+        'Error while calling GET BY ID ${Constant.baseUrl}$resourcePath, status code: $statusCode, message: ${e.message}',
+      );
+      throw Exception('HTTP Error: $statusCode');
+    }catch (e){
+      throw Exception("Unknown exception: $e");
+    }
+  }
+
+
+  Future<List<dynamic>> getByParam() async {
+    try{
+      final token = await getToken();
+      Options options = Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      final response = await _dio.get("${Constant.baseUrl}$resourcePath", options: options);
+      final List<dynamic> data = response.data;
       return data;
     } on DioException catch (e){
       final statusCode = e.response?.statusCode;

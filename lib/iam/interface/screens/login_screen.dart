@@ -90,7 +90,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   }
                               );
                             } catch (e){
-                              print("Hello 2: ${e}");
                               await showDialog(
                                   context: context,
                                   builder: (BuildContext context){

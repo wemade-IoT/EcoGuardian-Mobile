@@ -1,3 +1,4 @@
+import 'package:ecoguardian/profile/interface/widgets/notification_list.dart';
 import 'package:flutter/material.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -15,10 +16,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text(
-          'Notifications Screen',
-          style: TextStyle(fontSize: 24),
-        ),
+        child: NotificationList()
       ),
     );
   }

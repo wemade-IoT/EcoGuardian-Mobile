@@ -28,6 +28,16 @@ class StorageHelper {
     await prefs.setInt("id",id);
   }
 
+  static Future<void> saveEmail(String email) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("email",email);
+  }
+
+  static Future<String?> getEmail()async{
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("email");
+  }
+
   static Future<int?> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt("id");

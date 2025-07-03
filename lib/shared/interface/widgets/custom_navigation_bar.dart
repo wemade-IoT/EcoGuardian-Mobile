@@ -30,7 +30,6 @@ class CustomNavigationBar extends StatelessWidget {
             _buildNavIcon(Icons.home_rounded, 0, onIndexSelected, index),
             _buildNavIcon(Icons.monitor, 1, onIndexSelected, index), // Planta
             _buildNavIcon(Icons.question_answer_outlined, 2, onIndexSelected, index), // Pregunta
-            _buildNavIcon(Icons.attach_money, 3, onIndexSelected, index), // Pago
             _buildNavIcon(Icons.person_outline_rounded, 4, onIndexSelected, index),
           ],
         ),
