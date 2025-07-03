@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
+
 import '../../../shared/infrastructure/utils/serializable.dart';
 
 class PlantDto with Serializable {
   final int id;
   final String name;
+  XFile? image;
+  String? imageUrl;
   final String type;
   final bool isPlantation;
   final int areaCoverage;
@@ -16,6 +22,8 @@ class PlantDto with Serializable {
 
   PlantDto({
     required this.name,
+     this.image,
+    this.imageUrl,
     required this.id,
     required this.type,
     required this.isPlantation,
@@ -33,6 +41,7 @@ class PlantDto with Serializable {
     return PlantDto(
       id: json["id"],
       name: json["name"],
+      imageUrl: json["imageUrl"],
       type: json["type"],
       isPlantation: json["isPlantation"],
       areaCoverage: json["areaCoverage"],
@@ -53,6 +62,7 @@ class PlantDto with Serializable {
     return {
       "id": id,
       "name":name,
+      "image": image,
       "type": type,
       "isPlantation": isPlantation,
       "areaCoverage": areaCoverage,

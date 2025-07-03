@@ -21,7 +21,7 @@ class PlantProvider extends ChangeNotifier{
    }
 
    Future<void> createPlant(PlantDto plantDto)async{
-      await plantService.post(plantDto);
+      await plantService.createPlant(plantDto);
    }
 
    Future<void> deletePlant(PlantDto plantDto) async{

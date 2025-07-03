@@ -2,7 +2,6 @@ import 'package:ecoguardian/config/theme/app_theme.dart';
 import 'package:ecoguardian/monitoring/domain/dto/plant.dto.dart';
 import 'package:ecoguardian/monitoring/interface/widgets/plant_dialog.dart';
 import 'package:ecoguardian/monitoring/interface/widgets/plant_section.dart';
-import 'package:ecoguardian/public/interface/widgets/custom_elevated_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
