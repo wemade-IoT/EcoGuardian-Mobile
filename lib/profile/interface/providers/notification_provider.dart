@@ -14,9 +14,12 @@ class NotificationProvider extends ChangeNotifier{
       final userId = await StorageHelper.getUserId();
       final notificationService = NotificationService(resourcePath: "notifications?profileId=$userId");
       _notifications = await notificationService.getNotificationsByUserId(userId!);
+
+      print(_notifications);
+
       notifyListeners();
     } catch (e){
-      throw Exception("No notifications available");
+  throw Exception("No notifications available");
     }
   }
 

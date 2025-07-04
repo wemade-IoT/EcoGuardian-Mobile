@@ -8,6 +8,11 @@ import 'package:flutter/cupertino.dart';
 
 class AuthProvider extends ChangeNotifier{
 
+  Map<String, dynamic> allowRoles = {
+     "Business": true,
+    "Domestic": false,
+    "Admin": true,
+  };
 
   Future<void> signIn(String email, String password)async {
     final SignInRequestDto request = SignInRequestDto(email: email, password: password);

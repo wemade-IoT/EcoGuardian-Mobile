@@ -22,8 +22,15 @@ class PlantProvider extends ChangeNotifier{
      notifyListeners();
    }
 
-   Future<void> createPlant(PlantDto plantDto)async{
-      await plantService.createPlant(plantDto);
+   Future<int> createPlant(PlantDto plantDto) async{
+      final response =  await plantService.createPlant(plantDto);
+      if (response['id'] == null) {
+        throw Exception("Plant creation failed, no ID returned.");
+      }
+
+      print(response);
+
+      return response['id'] as int;
    }
 
    Future<void> deletePlant(PlantDto plantDto) async{

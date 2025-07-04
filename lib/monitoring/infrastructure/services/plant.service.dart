@@ -6,13 +6,10 @@ import 'package:logger/logger.dart';
 
 import '../../../config/constants/constant.dart';
 
-class PlantService extends BaseService{
+class PlantService extends BaseService {
   PlantService({required super.resourcePath});
 
-
-
-
-  Future<void> createPlant(PlantDto request) async {
+  Future<Map<String, dynamic>> createPlant(PlantDto request) async {
     try {
       final token = await getToken();
 
@@ -43,11 +40,13 @@ class PlantService extends BaseService{
         },
       );
 
-      await dio.post(
+      final response = await dio.post(
         Constant.baseUrl + resourcePath,
         data: formData,
         options: options,
       );
+
+      return {'message': response.data['message'], 'id': response.data['id']};
     } on DioException catch (e) {
       final statusCode = e.response?.statusCode;
       logger.log(
@@ -60,17 +59,10 @@ class PlantService extends BaseService{
     }
   }
 
-
-
-
   Future<List<PlantDto>> getPlantsByUserId(int userId) async {
     try {
       final token = await getToken();
-      Options options = Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-      );
+      Options options = Options(headers: {'Authorization': 'Bearer $token'});
       final response = await dio.get(
         Constant.baseUrl + resourcePath + "?userId=" + userId.toString(),
         options: options,
@@ -88,6 +80,4 @@ class PlantService extends BaseService{
       throw Exception("Unknown exception: $e");
     }
   }
-
-
 }

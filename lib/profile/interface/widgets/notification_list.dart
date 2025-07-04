@@ -9,13 +9,18 @@ class NotificationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final notificationProvider = context.watch<NotificationProvider>();
+
+    if (notificationProvider.notificationsCount == 0) {
+      return const Center(child: Text("No notifications available"));
+    }
+
     return ListView.builder(
-        itemCount: notificationProvider.notificationsCount,
-        itemBuilder: (BuildContext context, int index){
-          return NotificationPrototype(
-              notificationDto:notificationProvider.notifications[index]
-          );
-        }
+      itemCount: notificationProvider.notificationsCount,
+      itemBuilder: (BuildContext context, int index) {
+        return NotificationPrototype(
+          notificationDto: notificationProvider.notifications[index],
+        );
+      },
     );
   }
 }

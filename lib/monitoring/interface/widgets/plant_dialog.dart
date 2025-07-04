@@ -30,12 +30,14 @@ class _PlantDialogState extends State<PlantDialog> {
   late TextEditingController lightThresholdController;
   late TextEditingController temperatureThresholdController;
   late TextEditingController areaCoverageController;
-  XFile?  plantImageFile;
+  XFile? plantImageFile;
   bool isEnterprise = false;
 
   Future<void> pickImageFromGallery() async {
     final picker = ImagePicker();
-    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
 
     if (pickedFile != null) {
       setState(() {
@@ -43,7 +45,6 @@ class _PlantDialogState extends State<PlantDialog> {
       });
     }
   }
-
 
   @override
   void initState() {
@@ -67,14 +68,14 @@ class _PlantDialogState extends State<PlantDialog> {
       typeController.text = widget.plant!.type;
       waterThresholdController.text = widget.plant!.waterThreshold.toString();
       lightThresholdController.text = widget.plant!.lightThreshold.toString();
-      temperatureThresholdController.text = widget.plant!.temperatureThreshold.toString();
+      temperatureThresholdController.text =
+          widget.plant!.temperatureThreshold.toString();
       areaCoverageController.text = widget.plant!.areaCoverage.toString();
     }
   }
 
-
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     nameController.dispose();
     typeController.dispose();
@@ -91,183 +92,262 @@ class _PlantDialogState extends State<PlantDialog> {
           spacing: 10,
           children: [
             Text(
-                widget.plant != null ? "Update plant" : "Add new plant",
-              style: TextStyle(
-                fontSize: 18.0,
-                color: Colors.black
-              ),
+              widget.plant != null ? "Update plant" : "Add new plant",
+              style: TextStyle(fontSize: 18.0, color: Colors.black),
             ),
             Form(
               key: _formKey,
               child: Column(
-                      spacing: 20,
-                      children: [
-                        CustomTextField(
-                            controller: nameController,
-                            hintText: "Give plant name",
-                            label: "Name",
-                          onValidate: (_){
-                            return plantProvider.validateName(nameController.text);
-                          }
-                        ),
-                widget.plant == null
-                    ?  GestureDetector(
-                    onTap: pickImageFromGallery,
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.grey[200],
-                      ),
-                      child: Center(
-                        child: plantImageFile == null
-                            ? Icon(
-                          Icons.add_a_photo,
-                          color: Colors.grey[700],
-                          size: 50,
-                        )
-                            : ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.file(
-                            File(plantImageFile!.path), 
-                            fit: BoxFit.cover,
+                spacing: 20,
+                children: [
+                  CustomTextField(
+                    controller: nameController,
+                    hintText: "Give plant name",
+                    label: "Name",
+                    onValidate: (_) {
+                      return plantProvider.validateName(nameController.text);
+                    },
+                  ),
+                  widget.plant == null
+                      ? GestureDetector(
+                        onTap: pickImageFromGallery,
+                        child: Container(
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.grey[200],
+                          ),
+                          child: Center(
+                            child:
+                                plantImageFile == null
+                                    ? Icon(
+                                      Icons.add_a_photo,
+                                      color: Colors.grey[700],
+                                      size: 50,
+                                    )
+                                    : ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.file(
+                                        File(plantImageFile!.path),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                           ),
                         ),
-                      ),
-                    )
-                )
-                    : Container(),
-             Container(),
-              CustomTextField(
-                            controller: typeController,
-                            hintText: "Give plant type",
-                            label: "Type",
-                          onValidate: (_){
-                              return plantProvider.validateType(typeController.text);
-                          },
-                        ),
-                        CustomTextField(
-                            controller: waterThresholdController,
-                            hintText: "Give water threshold",
-                            label: "WaterThreshold",
-                          onValidate: (_){
-                              return plantProvider.validateThresholds(waterThresholdController.text);
-                          },
-                        ),
-                        CustomTextField(
-                            controller: lightThresholdController,
-                            hintText: "Give light threshold",
-                            label: "LightThreshold",
-                          onValidate:(_){
-                              return plantProvider.validateThresholds(lightThresholdController.text);
-                          },
-                        ),
-                        CustomTextField(
-                          controller: temperatureThresholdController,
-                          hintText: "Give temperature threshold",
-                          label: "Temperature Threshold",
-                          onValidate:(_){
-                            return plantProvider.validateThresholds(temperatureThresholdController.text);
-                          },
-                        ),
-                         isEnterprise ? CustomTextField(
-                            controller: areaCoverageController,
-                            hintText: "Give Area coverage (KM)",
-                            label: "Area coverage",
-                            onValidate:(_){
-                              return plantProvider.validateAreaCoverage(areaCoverageController.text);
-                            },
-                          ) : Container(),
-                        SizedBox(
-                          width: double.infinity,
-                          child: CustomElevatedButton(
-                              onPressed: ()async{
-                                if(widget.plant != null){
-                                   final newPlantInformation = PlantDto(
-                                       name: nameController.text,
-                                       id: widget.plant!.id,
-                                       type: typeController.text,
-                                       isPlantation: widget.plant!.isPlantation,
-                                       areaCoverage: !isEnterprise ? 0 : int.parse(areaCoverageController.text) ,
-                                       userId:widget.plant!.userId,
-                                       waterThreshold: int.parse(waterThresholdController.text),
-                                       temperatureThreshold: int.parse(temperatureThresholdController.text),
-                                       lightThreshold: int.parse(lightThresholdController.text),
-                                       createdAt: widget.plant!.createdAt,
-                                       updatedAt: widget.plant!.updatedAt,
-                                       stateId: widget.plant!.stateId
-                                   );
-                                   try{
-                                     await plantProvider.updatePlant(newPlantInformation);
-                                     context.push("/monitoring");
-                                   } catch (e){
-                                     await showDialog(
-                                         context: context,
-                                         builder: (BuildContext context){
-                                           return CustomDialog(
-                                               title: "An error has ocurred",
-                                               content: "An error has ocurred while trying to update your plant, please try again",
-                                               isSuccess: false,
-                                               onConfirm: (){
-      
-                                               },
-                                               onCancel: (){
-      
-                                               }
-                                           );
-                                         }
-                                     );
-                                   }
-                                }else{
-                                  final userId = await StorageHelper.getUserId();
-                                  final newPlantInformation = PlantDto(
-                                      name: nameController.text,
-                                      id: 0,
-                                      type: typeController.text,
-                                      image: plantImageFile,
-                                      isPlantation: false,
-                                      areaCoverage: !isEnterprise ? 0 : int.parse(areaCoverageController.text) ,
-                                      userId: userId!,
-                                      waterThreshold: int.parse(waterThresholdController.text),
-                                      temperatureThreshold: int.parse(temperatureThresholdController.text),
-                                      lightThreshold: int.parse(lightThresholdController.text),
-                                      createdAt: DateTime.now(),
-                                      updatedAt: DateTime.now(),
-                                      stateId: 1
-                                  );
-                                  try{
-                                    await plantProvider.createPlant(newPlantInformation);
-                                    context.push("/monitoring");
-                                  } catch (e){
-                                    await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context){
-                                          return CustomDialog(
-                                              title: "An error has ocurred",
-                                              content: "An error has ocurred while trying to register your plant, please try again",
-                                              isSuccess: false,
-                                              onConfirm: (){
-      
-                                              },
-                                              onCancel: (){
-      
-                                              }
-                                          );
-                                        }
-                                    );
-                                  }
-                                }
+                      )
+                      : Container(),
+                  Container(),
+                  CustomTextField(
+                    controller: typeController,
+                    hintText: "Give plant type",
+                    label: "Type",
+                    onValidate: (_) {
+                      return plantProvider.validateType(typeController.text);
+                    },
+                  ),
+                  CustomTextField(
+                    controller: waterThresholdController,
+                    hintText: "Give water threshold",
+                    label: "WaterThreshold",
+                    onValidate: (_) {
+                      return plantProvider.validateThresholds(
+                        waterThresholdController.text,
+                      );
+                    },
+                  ),
+                  CustomTextField(
+                    controller: lightThresholdController,
+                    hintText: "Give light threshold",
+                    label: "LightThreshold",
+                    onValidate: (_) {
+                      return plantProvider.validateThresholds(
+                        lightThresholdController.text,
+                      );
+                    },
+                  ),
+                  CustomTextField(
+                    controller: temperatureThresholdController,
+                    hintText: "Give temperature threshold",
+                    label: "Temperature Threshold",
+                    onValidate: (_) {
+                      return plantProvider.validateThresholds(
+                        temperatureThresholdController.text,
+                      );
+                    },
+                  ),
+                  isEnterprise
+                      ? CustomTextField(
+                        controller: areaCoverageController,
+                        hintText: "Give Area coverage (KM)",
+                        label: "Area coverage",
+                        onValidate: (_) {
+                          return plantProvider.validateAreaCoverage(
+                            areaCoverageController.text,
+                          );
+                        },
+                      )
+                      : Container(),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomElevatedButton(
+                      onPressed: () async {
+                        if (widget.plant != null) {
+                          final newPlantInformation = PlantDto(
+                            name: nameController.text,
+                            id: widget.plant!.id,
+                            type: typeController.text,
+                            isPlantation: widget.plant!.isPlantation,
+                            areaCoverage:
+                                !isEnterprise
+                                    ? 0
+                                    : int.parse(areaCoverageController.text),
+                            userId: widget.plant!.userId,
+                            waterThreshold: int.parse(
+                              waterThresholdController.text,
+                            ),
+                            temperatureThreshold: int.parse(
+                              temperatureThresholdController.text,
+                            ),
+                            lightThreshold: int.parse(
+                              lightThresholdController.text,
+                            ),
+                            createdAt: widget.plant!.createdAt,
+                            updatedAt: widget.plant!.updatedAt,
+                            stateId: widget.plant!.stateId,
+                          );
+                          try {
+                            await plantProvider.updatePlant(
+                              newPlantInformation,
+                            );
+                            context.push(
+                              "/installations",
+                              extra: newPlantInformation,
+                            );
+                          } catch (e) {
+                            await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CustomDialog(
+                                  title: "An error has ocurred",
+                                  content:
+                                      "An error has ocurred while trying to update your plant, please try again",
+                                  isSuccess: false,
+                                  onConfirm: () {},
+                                  onCancel: () {},
+                                );
                               },
-                              background: CustomColors.primary,
-                              foreground: Colors.white,
-                              label: "Submit"
-                          ),
-                        )
-                      ],
-                  )
+                            );
+                          }
+                        } else {
+                          if (plantProvider.plants.length > 5) {
+                            final newPlantInformation = PlantDto(
+                              name: nameController.text,
+                              id: 0,
+                              type: typeController.text,
+                              image: plantImageFile,
+                              isPlantation: false,
+                              areaCoverage:
+                                  !isEnterprise
+                                      ? 0
+                                      : int.parse(areaCoverageController.text),
+                              userId: 0,
+                              waterThreshold: int.parse(
+                                waterThresholdController.text,
+                              ),
+                              temperatureThreshold: int.parse(
+                                temperatureThresholdController.text,
+                              ),
+                              lightThreshold: int.parse(
+                                lightThresholdController.text,
+                              ),
+                              createdAt: DateTime.now(),
+                              updatedAt: DateTime.now(),
+                              stateId: 1,
+                            );
+
+                            Navigator.of(context).pop();
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text(
+                                  'You can only have a maximum of 5 plants registered',
+                                ),
+                                backgroundColor: Colors.orange[400],
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+
+                            context.push(
+                              "/installations",
+                              extra: newPlantInformation,
+                            );
+
+                            return;
+                          }
+
+                          final userId = await StorageHelper.getUserId();
+                          final newPlantInformation = PlantDto(
+                            name: nameController.text,
+                            id: 0,
+                            type: typeController.text,
+                            image: plantImageFile,
+                            isPlantation: false,
+                            areaCoverage:
+                                !isEnterprise
+                                    ? 0
+                                    : int.parse(areaCoverageController.text),
+                            userId: userId!,
+                            waterThreshold: int.parse(
+                              waterThresholdController.text,
+                            ),
+                            temperatureThreshold: int.parse(
+                              temperatureThresholdController.text,
+                            ),
+                            lightThreshold: int.parse(
+                              lightThresholdController.text,
+                            ),
+                            createdAt: DateTime.now(),
+                            updatedAt: DateTime.now(),
+                            stateId: 1,
+                          );
+                          try {
+                            await plantProvider.createPlant(
+                              newPlantInformation,
+                            );
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Plant created successfully'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          } catch (e) {
+                            await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CustomDialog(
+                                  title: "An error has ocurred",
+                                  content:
+                                      "An error has ocurred while trying to register your plant, please try again",
+                                  isSuccess: false,
+                                  onConfirm: () {},
+                                  onCancel: () {},
+                                );
+                              },
+                            );
+                          }
+                        }
+                      },
+                      background: CustomColors.primary,
+                      foreground: Colors.white,
+                      label: "Submit",
+                    ),
+                  ),
+                ],
               ),
+            ),
           ],
         ),
       ),

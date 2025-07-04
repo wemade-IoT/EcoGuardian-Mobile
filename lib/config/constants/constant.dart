@@ -14,4 +14,6 @@ class Constant {
   static const String paymentsPath = '/payments';
   static const String profilePath = '/profile';
   static const String notificationsPath = '/notifications';
+  static const String installationPath = '/installations';
+  static const String orderDetailPath = '/order-detail';
 }
