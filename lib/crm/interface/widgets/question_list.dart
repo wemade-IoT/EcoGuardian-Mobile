@@ -1,0 +1,46 @@
+import 'package:ecoguardian/crm/interface/providers/question_provider.dart';
+import 'package:ecoguardian/crm/interface/screens/answers_screen.dart';
+import 'package:ecoguardian/crm/interface/widgets/answer_form.dart';
+import 'package:ecoguardian/crm/interface/widgets/question_card.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class QuestionList extends StatelessWidget {
+  final bool isSpecialist;
+  const QuestionList({super.key, required this.isSpecialist});
+
+  @override
+  Widget build(BuildContext context) {
+    final questionProvider = context.watch<QuestionProvider>();
+    return  ListView.builder(
+      shrinkWrap: true,
+          itemCount: questionProvider.questionCount,
+          itemBuilder: (BuildContext context, int index){
+            return isSpecialist ?
+              GestureDetector(
+                onTap: () async{
+                  await showDialog(
+                      context: context,
+                      builder: (BuildContext context){
+                        return AnswerDialog(questionId: questionProvider.questions[index].questionId!);
+                      }
+                  );
+                },
+                child: QuestionCard(
+                  questionDto:
+                  questionProvider.questions[index]
+                ),
+              ) :  GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_) => AnswersScreen(questionId:questionProvider.questions[index].questionId!)));
+              },
+                child: QuestionCard(
+                  questionDto:
+                  questionProvider.questions[index]
+                            ),
+              );
+          }
+    );
+  }
+}

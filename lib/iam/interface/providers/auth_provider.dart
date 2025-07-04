@@ -40,11 +40,23 @@ class AuthProvider extends ChangeNotifier{
 
   Future<bool> isEnterprise() async{
     final payload = await getPayload();
-    print(payload);
     final role = payload["role"];
-    print(role);
-    return allowRoles[role];
+    return role == "Business";
   }
+
+  Future<bool> isAdmin() async{
+    final payload = await getPayload();
+    final role = payload["role"];
+    return role == "Admin";
+  }
+
+  Future<bool> isSpecialist() async{
+    final payload = await getPayload();
+    final role = payload["role"];
+    return role == "Specialist";
+  }
+
+
 
 
 

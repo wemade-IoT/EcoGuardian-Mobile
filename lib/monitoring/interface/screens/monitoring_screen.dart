@@ -32,7 +32,7 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
   @override
   void initState(){
     super.initState();
-    _loadPlants();
+    _loadPlants()
   }
 
   @override
