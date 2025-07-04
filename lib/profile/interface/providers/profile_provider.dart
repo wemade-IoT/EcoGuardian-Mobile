@@ -10,10 +10,17 @@ class ProfileProvider extends ChangeNotifier{
   Future<void> getProfileByEmail() async{
      try{
        final email = await StorageHelper.getEmail();
-       final profileService = ProfileService(resourcePath: "profiles");
-       final response = await profileService.getById(email!);
+       print(email!);
+       final profileService = ProfileService(resourcePath: "profiles?email=$email");
+       final response = await profileService.getProfileByEmail(email);
        print(response);
-       _profile = ProfileDto.fromJson(response);
+
+        if (response == null) {
+          throw Exception("No profile found for email $email");
+        }
+
+        _profile = response;
+       
        notifyListeners();
      } catch (e){
        throw Exception("No profile available $e");

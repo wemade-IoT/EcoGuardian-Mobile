@@ -1,3 +1,5 @@
+import 'package:ecoguardian/planning/interface/providers/device_provider.dart';
+import 'package:ecoguardian/planning/interface/providers/order_provider.dart';
 import 'package:ecoguardian/profile/interface/providers/notification_provider.dart';
 import 'package:ecoguardian/profile/interface/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,9 @@ void main() {
         ChangeNotifierProvider(create: (_) => PlantMetricsProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
-        ChangeNotifierProvider(create: (_) => ProfileProvider())
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => DeviceProvider())
       ],
       child: const MyApp(),
     ),

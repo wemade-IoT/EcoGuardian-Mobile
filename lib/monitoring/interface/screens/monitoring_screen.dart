@@ -1,7 +1,9 @@
 import 'package:ecoguardian/monitoring/interface/providers/plant_provider.dart';
 import 'package:ecoguardian/monitoring/interface/widgets/plant_dialog.dart';
 import 'package:ecoguardian/monitoring/interface/widgets/plant_list.dart';
+import 'package:ecoguardian/profile/interface/providers/profile_provider.dart';
 import 'package:ecoguardian/public/interface/widgets/custom_elevated_button.dart';
+import 'package:ecoguardian/shared/infrastructure/helpers/storage_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,8 +23,9 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
 
   void _loadPlants()  {
     ()async{
+      final userId = await StorageHelper.getUserId();
       final plantProvider = context.read<PlantProvider>();
-      await plantProvider.getPlantsByUserId(1);
+      await plantProvider.getPlantsByUserId(userId!);
     }();
   }
 
@@ -31,6 +34,7 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
     super.initState();
     _loadPlants();
   }
+
   @override
   Widget build(BuildContext context) {
     final plantProvider = context.watch<PlantProvider>();
