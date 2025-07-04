@@ -23,16 +23,16 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
 
   void _loadPlants()  {
     ()async{
-      final userId = await StorageHelper.getUserId();
+      //final userId = await StorageHelper.getUserId();
       final plantProvider = context.read<PlantProvider>();
-      await plantProvider.getPlantsByUserId(userId!);
+      await plantProvider.getPlantsByUserId();
     }();
   }
 
   @override
   void initState(){
     super.initState();
-    _loadPlants()
+    _loadPlants();
   }
 
   @override
