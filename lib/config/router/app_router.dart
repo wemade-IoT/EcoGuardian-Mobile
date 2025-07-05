@@ -8,7 +8,9 @@ import 'package:ecoguardian/ecoguardian/planning/interface/screens/installation_
 import 'package:ecoguardian/ecoguardian/profile/interface/screens/notifications_screen.dart';
 import 'package:ecoguardian/ecoguardian/profile/interface/screens/profile_screen.dart';
 import 'package:ecoguardian/shared/interface/widgets/main_wrapper.dart';
+import 'package:ecoguardian/shared/interface/screens/error_page.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -85,6 +87,24 @@ final appRouter = GoRouter(
           ),
         ),
       ]
-    )
+    ),
+    // Rutas de error
+    GoRoute(
+      path: '/error',
+      name: 'error',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return ErrorPage(
+          errorMessage: extra?['message'] as String?,
+          errorCode: extra?['code'] as String?,
+          onRetry: extra?['onRetry'] as VoidCallback?,
+        );
+      },
+    ),
+    GoRoute(
+      path: '/404',
+      name: 'not-found',
+      builder: (context, state) => const NotFoundPage(),
+    ),
   ]
 );

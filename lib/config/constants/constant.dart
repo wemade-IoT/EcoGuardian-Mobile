@@ -14,4 +14,8 @@ class Constant {
   static const String paymentsPath = '/payments';
   static const String profilePath = '/profile';
   static const String notificationsPath = '/notifications';
+  
+  // error related routes
+  static const String errorPath = '/error';
+  static const String notFoundPath = '/404';
 }
