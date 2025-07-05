@@ -10,7 +10,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../widgets/password_field.dart';
 
-
 class LoginScreen extends StatefulWidget {
   static const String name = 'login_screen';
 
@@ -21,7 +20,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -58,53 +56,56 @@ class _LoginScreenState extends State<LoginScreen> {
                         const Text(
                           'EcoGuardian',
                           style: TextStyle(
-                            fontSize: 28.0,
+                            fontSize: 30,
                             fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5,
+                            letterSpacing: 2.0,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 30),
                         EmailField(emailController: _emailController),
                         const SizedBox(height: 25),
                         PasswordField(passwordController: _passwordController),
                         const SizedBox(height: 30),
                         ElevatedButton(
-                          onPressed: () async{
-                            print("Hellooo");
-                            try{
-                              await authProvider.signIn(_emailController.text,_passwordController.text);
-                              await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context){
-                                    return CustomDialog(
-                                        title: "Welcome to EcoGuardian!",
-                                        content: "",
-                                        isSuccess: true,
-                                      onConfirm: () {
-                                        context.go('/home');
-                                      },
-                                      onCancel: () {
-                                        context.go('/home');
-                                      },
-                                    );
-                                  }
+                          onPressed: () async {
+                            try {
+                              await authProvider.signIn(
+                                _emailController.text,
+                                _passwordController.text,
                               );
-                            } catch (e){
                               await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context){
-                                    return CustomDialog(
-                                        title: "An error has ocurred",
-                                        content: "Check your credentials and try again",
-                                        isSuccess: false,
-                                      onConfirm: () {
-                                          Navigator.pop(context);
-                                      },
-                                      onCancel: () {
-                                        Navigator.pop(context);
-                                      },
-                                    );
-                                  }
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return CustomDialog(
+                                    title: "Welcome to EcoGuardian!",
+                                    content: "",
+                                    isSuccess: true,
+                                    onConfirm: () {
+                                      context.go('/home');
+                                    },
+                                    onCancel: () {
+                                      context.go('/home');
+                                    },
+                                  );
+                                },
+                              );
+                            } catch (e) {
+                              await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return CustomDialog(
+                                    title: "An error has ocurred",
+                                    content:
+                                        "Check your credentials and try again",
+                                    isSuccess: false,
+                                    onConfirm: () {
+                                      Navigator.pop(context);
+                                    },
+                                    onCancel: () {
+                                      Navigator.pop(context);
+                                    },
+                                  );
+                                },
                               );
                             }
                           },
@@ -139,4 +140,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
