@@ -28,7 +28,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => DeviceProvider()),
         ChangeNotifierProvider(create: (_) => AnswerProvider()),
-        ChangeNotifierProvider(create: (_) => QuestionProvider())
+        ChangeNotifierProvider(create: (_) => QuestionProvider()),
+        ChangeNotifierProvider(create: (_) => DeviceProvider())
       ],
       child: const MyApp(),
     ),

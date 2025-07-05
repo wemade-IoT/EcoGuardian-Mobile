@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 
 class ConsumptionLineChart extends StatelessWidget {
   final List<FlSpot> waterData;
-  final List<FlSpot> energyData;
-  final List<String> labels;
+  final List<FlSpot> temperatureData;
+  final List<FlSpot> lightData;
+  final List<FlSpot> humidityData;
+  final String label;
 
   const ConsumptionLineChart({
     super.key,
     required this.waterData,
-    required this.energyData,
-    required this.labels,
+    required this.temperatureData,
+    required this.label,
+    required this.lightData,
+    required this.humidityData,
   });
 
   @override
@@ -30,12 +34,14 @@ class ConsumptionLineChart extends StatelessWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   getTitlesWidget: (value, meta) {
-                    int idx = value.toInt();
-                    if (idx >= 0 && idx < labels.length) {
-                      return Text(labels[idx], style: const TextStyle(fontSize: 12));
-                    }
-                    return const SizedBox.shrink();
-                  },
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          label,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      );
+                    },
                   interval: 1,
                   reservedSize: 32,
                 ),
@@ -54,9 +60,25 @@ class ConsumptionLineChart extends StatelessWidget {
                 belowBarData: BarAreaData(show: false),
               ),
               LineChartBarData(
-                spots: energyData,
+                spots: temperatureData,
                 isCurved: true,
                 color: Colors.green,
+                barWidth: 3,
+                dotData: FlDotData(show: false),
+                belowBarData: BarAreaData(show: false),
+              ),
+              LineChartBarData(
+                spots: lightData,
+                isCurved: true,
+                color: Colors.yellow,
+                barWidth: 3,
+                dotData: FlDotData(show: false),
+                belowBarData: BarAreaData(show: false),
+              ),
+              LineChartBarData(
+                spots: humidityData,
+                isCurved: true,
+                color: Colors.orange,
                 barWidth: 3,
                 dotData: FlDotData(show: false),
                 belowBarData: BarAreaData(show: false),
@@ -69,4 +91,3 @@ class ConsumptionLineChart extends StatelessWidget {
     );
   }
 }
-

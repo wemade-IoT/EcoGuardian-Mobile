@@ -1,42 +1,35 @@
-class WaterMetricDto {
-  final double value;
-  final String description;
+class MetricRegistryDto {
+  int? id;
+  int? deviceId;
+  String? createdAt;
+  List<Metrics>? metrics;
 
-  WaterMetricDto({required this.value, required this.description});
+  MetricRegistryDto({this.id, this.deviceId, this.createdAt, this.metrics});
 
-  factory WaterMetricDto.fromJson(Map<String, dynamic> json) {
-    return WaterMetricDto(
-      value: (json['value'] as num).toDouble(),
-      description: json['description'] ?? '',
-    );
+  MetricRegistryDto.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    deviceId = json['deviceId'];
+    createdAt = json['createdAt'];
+    if (json['metrics'] != null) {
+      metrics = <Metrics>[];
+      json['metrics'].forEach((v) {
+        metrics!.add(Metrics.fromJson(v));
+      });
+    }
   }
+
 }
 
-class LightMetricDto {
-  final double value;
-  final String description;
+class Metrics {
+  int? id;
+  double? metricValue;
+  int? metricTypesId;
 
-  LightMetricDto({required this.value, required this.description});
+  Metrics({this.id, this.metricValue, this.metricTypesId});
 
-  factory LightMetricDto.fromJson(Map<String, dynamic> json) {
-    return LightMetricDto(
-      value: (json['value'] as num).toDouble(),
-      description: json['description'] ?? '',
-    );
+  Metrics.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    metricValue = json['metricValue'];
+    metricTypesId = json['metricTypesId'];
   }
 }
-
-class HumidityMetricDto {
-  final double value;
-  final String description;
-
-  HumidityMetricDto({required this.value, required this.description});
-
-  factory HumidityMetricDto.fromJson(Map<String, dynamic> json) {
-    return HumidityMetricDto(
-      value: (json['value'] as num).toDouble(),
-      description: json['description'] ?? '',
-    );
-  }
-}
-

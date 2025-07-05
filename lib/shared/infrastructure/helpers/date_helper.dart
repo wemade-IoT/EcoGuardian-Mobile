@@ -7,6 +7,12 @@ String formatDate(DateTime dateTime) {
   return '$day of $month, $year, $hour:$minute';
 }
 
+
+String normalizeDate(String date){
+  DateTime dateParsed = DateTime.parse(date);
+  return "${dateParsed.year}/${dateParsed.month}/${dateParsed.day}" + " ${dateParsed.hour}:${dateParsed.minute} ";
+}
+
 String _getMonthName(int month) {
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',

@@ -138,6 +138,28 @@ Future<List<dynamic>> getAll() async {
     }
   }
 
+  Future<Map<String, dynamic>> getByIdV2() async {
+    try {
+      final token = await getToken();
+      Options options = Options(headers: {'Authorization': 'Bearer $token'});
+      final response = await _dio.get(
+        "${Constant.baseUrl}$resourcePath",
+        options: options,
+      );
+      final data = response.data;
+      return data;
+    } on DioException catch (e) {
+      final statusCode = e.response?.statusCode;
+      logger.log(
+        Level.error,
+        'Error while calling GET BY ID ${Constant.baseUrl}$resourcePath, status code: $statusCode, message: ${e.message}',
+      );
+      throw Exception('HTTP Error: $statusCode');
+    } catch (e) {
+      throw Exception("Unknown exception: $e");
+    }
+  }
+
   Future<List<dynamic>> getV2() async {
     try{
       final token = await getToken();

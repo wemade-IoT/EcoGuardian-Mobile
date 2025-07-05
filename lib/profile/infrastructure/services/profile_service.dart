@@ -7,7 +7,7 @@ class ProfileService extends BaseService {
 
   Future<ProfileDto> getProfileByEmail(String email) async {
     try {
-      final response = await getByParamObject(); 
+      final response = await getByParamObject();
       if (response.isEmpty) {
         throw Exception("No profile found for email $email");
       }
