@@ -14,7 +14,7 @@ class QuestionList extends StatelessWidget {
   Widget build(BuildContext context) {
     final questionProvider = context.watch<QuestionProvider>();
     return  ListView.builder(
-      shrinkWrap: true,
+          shrinkWrap: true,
           itemCount: questionProvider.questionCount,
           itemBuilder: (BuildContext context, int index){
             return  GestureDetector(
