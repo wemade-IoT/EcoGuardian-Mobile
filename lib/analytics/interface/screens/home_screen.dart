@@ -1,5 +1,6 @@
 import 'package:ecoguardian/analytics/interface/providers/plant_metrics_provider.dart';
 import 'package:ecoguardian/analytics/domain/dto/plant_metrics.dto.dart';
+import 'package:ecoguardian/shared/interface/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -22,15 +23,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final averageRecords = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0
-  };
+  int selectedPlant = 0;
 
+  Map<int,double> records = {
+    1: 0.0,
+    2: 0.0,
+    3: 0.0,
+    4: 0.0
+  };
   List<dynamic> devices = [];
-String labels = "";
+  String labels = "";
   List<dynamic> latestMetrics = [];
 
   List<FlSpot> waterData = [];
@@ -38,21 +40,27 @@ String labels = "";
   List<FlSpot> lightData = [];
   List<FlSpot> temperatureData = [];
 
-  Future<void> assignDevices(List<dynamic> plantIds, BuildContext context) async {
+  Future<void> assignDevices(int plantId, BuildContext context) async {
+    devices = [];
     final deviceProvider = Provider.of<DeviceProvider>(context, listen: false);
-    for (int i = 0; i < plantIds.length; i++) {
-      final data = await deviceProvider.getDevicesByPlantId(plantIds[i]);
-      devices.add(data);
-    }
+   try{
+     final data = await deviceProvider.getDevicesByPlantId(plantId);
+     devices.add(data);
+   } catch (e){
+     throw Exception("No devices available");
+   }
   }
 
   Future<void> getLatestMetrics(BuildContext context) async {
-    final metricProvider = Provider.of<PlantMetricsProvider>(context, listen: false);
-
-    for (var deviceList in devices) {
-      for (var device in deviceList) {
+        final metricProvider = Provider.of<PlantMetricsProvider>(context, listen: false);
+        final deviceList = devices.last;
+        humidityData = [];
+        lightData = [];
+        temperatureData = [];
+        waterData = [];
+        labels = "";
         try {
-          MetricRegistryDto metricRecords = await metricProvider.fetchLatestMetrics(device.id);
+          MetricRegistryDto metricRecords = await metricProvider.fetchLatestMetrics(deviceList.last.id);
           if (metricRecords.metrics != null && metricRecords.metrics!.isNotEmpty) {
             labels = normalizeDate(metricRecords.createdAt!);
             for (var metric in metricRecords.metrics!) {
@@ -70,57 +78,107 @@ String labels = "";
               }
             }
           } else {
-            throw Exception('No metrics available for device ${device.id}');
+            throw Exception('No metrics available for device ${deviceList.last.id}');
           }
         } catch (e) {
-          throw Exception("Error al obtener las métricas para el dispositivo ${device.id}: $e");
+          throw Exception("An error has ocurred whilwe trying to fecth latest metrics by device id ${deviceList.last.id}: $e");
         }
-      }
-    }
   }
 
-  Future<void> matchMetricsByDevice(Map<int, int> records, BuildContext context) async {
-    final metricProvider = Provider.of<PlantMetricsProvider>(context, listen: false);
 
-    for (var deviceList in devices) {
-      for (var device in deviceList) {
-        try {
-          List<MetricRegistryDto> metricRecords = await metricProvider.fetchMetrics(device.id);
-          for (var record in metricRecords) {
-            for (var metric in record.metrics!) {
-              if (records.containsKey(metric.metricTypesId)) {
-                int currentValue = records[metric.metricTypesId] ?? 0;
-                int metricValue = metric.metricValue?.toInt() ?? 0;
-                records[metric.metricTypesId!] = currentValue + metricValue;
+  Future<void> matchMetricsByDevice(Map<int, double> records, BuildContext context) async {
+      final metricProvider = Provider.of<PlantMetricsProvider>(context, listen: false);
+      Map<int, double> metricSums = {};
+      Map<int, int> metricCounts = {};
+      records.clear();
+      for (var deviceList in devices) {
+        for (var device in deviceList) {
+          try {
+            List<MetricRegistryDto> metricRecords = await metricProvider.fetchMetrics(device.id);
+
+            for (var record in metricRecords) {
+              for (var metric in record.metrics!) {
+                int metricTypeId = metric.metricTypesId!;
+                double metricValue = metric.metricValue?.toDouble() ?? 0;
+                metricSums[metricTypeId] = (metricSums[metricTypeId] ?? 0) + metricValue;
+                metricCounts[metricTypeId] = (metricCounts[metricTypeId] ?? 0) + 1;
               }
             }
+          } catch (e) {
+            throw Exception("An error has ocurred while trying to fecth metrics by device ${device.id}: $e");
           }
-        } catch (e) {
-          throw Exception("Error al obtener las métricas para el dispositivo ${device.id}: $e");
+        }
+      }
+      for (var metricTypeId in metricSums.keys) {
+        if (metricCounts[metricTypeId]! > 0) {
+          records[metricTypeId] = metricSums[metricTypeId]! / metricCounts[metricTypeId]!;
+        }
+      }
+  }
+
+  final Map<int, Map<String, dynamic>> metricConfig = {
+    1: {
+      'icon': Icons.water_drop,
+      'title': 'Water Consumption',
+      'unit': 'L',
+      'description': 'Your hourly water consumption',
+      'iconColor': Colors.blue,
+    },
+    2: {
+      'icon': Icons.water_damage_outlined,
+      'title': 'Humidity Level',
+      'unit': '%',
+      'description': 'Your hourly humidity consumption',
+      'iconColor': Colors.teal,
+    },
+    3: {
+      'icon': Icons.wb_sunny_outlined,
+      'title': 'Light Level',
+      'unit': 'lx',
+      'description': 'Your hourly light consumption',
+      'iconColor': Colors.amber,
+    },
+    4: {
+      'icon': Icons.ac_unit,
+      'title': 'Temperature Level',
+      'unit': 'Cº',
+      'description': 'Your hourly temperature consumption',
+      'iconColor': Colors.amber,
+    },
+  };
+
+  List<Widget> buildMetricCards(Map<int, double> records) {
+    List<Widget> cards = [];
+
+    for (var entry in records.entries) {
+      final metricId = entry.key;
+      final value = entry.value;
+      final config = metricConfig[metricId];
+      if (config != null) {
+        cards.add(
+          PlantMetricCard(
+            icon: config['icon'],
+            title: config['title'],
+            value: '${value.toStringAsFixed(1)} ${config['unit']}',
+            description: config['description'],
+            iconColor: config['iconColor'],
+          ),
+        );
+        if (entry != records.entries.last) {
+          cards.add(const SizedBox(height: 16));
         }
       }
     }
+
+    return cards;
   }
 
-  Future<void> _initialize() async {
-    final plantProvider = context.read<PlantProvider>();
-    final List<dynamic> plantIds = plantProvider.plants.map((plant) => plant.id).toList();
-    await assignDevices(plantIds, context);
-    if (devices.isNotEmpty) {
-      await matchMetricsByDevice(averageRecords, context);
-      await getLatestMetrics(context);
-    } else {
-      throw Exception("No se encontraron dispositivos.");
-    }
-  }
 
   @override
   void initState() {
     super.initState();
     Future.microtask(() async {
       await Provider.of<PlantProvider>(context, listen: false).getPlantsByUserId();
-      await _initialize();
-      setState(() {});
     });
     Future.microtask(() => Provider.of<NotificationProvider>(context, listen: false).getNotificationsByUserId());
     Future.microtask(() => Provider.of<ProfileProvider>(context, listen: false).getProfileByEmail());
@@ -128,6 +186,7 @@ String labels = "";
 
   @override
   Widget build(BuildContext context) {
+    final plantProvider = context.watch<PlantProvider>();
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 18.0, right: 18.0, top: 32.0, bottom: 100.0),
@@ -138,7 +197,7 @@ String labels = "";
               const Padding(
                 padding: EdgeInsets.only(bottom: 8.0),
                 child: Text(
-                  'Check your latest record and total consumptions',
+                  'Check your latest record and average consumption',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -146,6 +205,35 @@ String labels = "";
                   textAlign: TextAlign.center,
                 ),
               ),
+              CustomDropdown(
+                  initialValue: selectedPlant,
+                  options: plantProvider.plants,
+                onChanged: (value) async{
+                    setState(() {
+                      selectedPlant = value!;
+                    });
+                     try{
+                       await assignDevices(selectedPlant, context);
+                     } catch (e){
+                       throw Exception("No devices available");
+                     }
+                    if (devices.isNotEmpty) {
+                      setState(() {
+
+                      });
+                      await Future.wait([
+                        matchMetricsByDevice(records, context),
+                        getLatestMetrics(context),
+                      ]);
+                      setState(() {
+
+                      });
+                    } else {
+                      throw Exception("No se encontraron dispositivos.");
+                    }
+                },
+              ),
+              const SizedBox(height: 20),
               ConsumptionLineChart(
                 waterData: waterData,
                 label: labels,
@@ -158,42 +246,10 @@ String labels = "";
                 builder: (context, provider, _) {
                   if (provider.isLoading) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (waterData.isNotEmpty || lightData.isNotEmpty || temperatureData.isNotEmpty || humidityData.isNotEmpty) {
+                  } else if (waterData.isNotEmpty  || lightData.isNotEmpty  || temperatureData.isNotEmpty || humidityData.isNotEmpty) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        PlantMetricCard(
-                          icon: Icons.water_drop,
-                          title: 'Water Consumption',
-                          value: '${averageRecords[1]} L',
-                          description: "Your hourly water consumption",
-                          iconColor: Colors.blue,
-                        ),
-                        const SizedBox(height: 16),
-                        PlantMetricCard(
-                          icon: Icons.water_damage_outlined,
-                          title: 'Humidity Level',
-                          value: '${averageRecords[2]}%',
-                          description: "Your hourly humidity consumption",
-                          iconColor: Colors.teal,
-                        ),
-                        const SizedBox(height: 16),
-                        PlantMetricCard(
-                          icon: Icons.wb_sunny_outlined,
-                          title: 'Light Level',
-                          value: '${averageRecords[3]} lx',
-                          description: "Your hourly light consumption",
-                          iconColor: Colors.amber,
-                        ),
-                        const SizedBox(height: 16),
-                        PlantMetricCard(
-                          icon: Icons.ac_unit,
-                          title: 'Temperature Level',
-                          value: '${averageRecords[4]} Cº',
-                          description: "Your hourly temperature consumption",
-                          iconColor: Colors.amber,
-                        ),
-                      ],
+                      children:  buildMetricCards(records)
                     );
                   }
                   return const Center(
