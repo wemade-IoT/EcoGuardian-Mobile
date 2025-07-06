@@ -179,7 +179,7 @@ class _ConsultingScreenState extends State<ConsultingScreen> {
         ) : Container(),
 
         selectedPlant > 0 ?
-        QuestionList(isSpecialist: false) :
+        QuestionList() :
         Container()
 
 
@@ -191,7 +191,7 @@ class _ConsultingScreenState extends State<ConsultingScreen> {
       children: [
         Text('Specialist Menu', style: TextStyle(fontSize: 20)),
         const SizedBox(height: 20),
-        QuestionList(isSpecialist: true)
+        QuestionList()
       ],
     );
   }

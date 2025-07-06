@@ -30,14 +30,15 @@ final appRouter = GoRouter(
       },
       redirect: (BuildContext context, redirect) async {
         final token = await StorageHelper.getToken();
-        final authProvider = context.read<AuthProvider>();
-        final isSpecialist = await authProvider.isSpecialist();
-        if (token == null) {
-          return '/';
-        }
-        if (isSpecialist && redirect.fullPath != "/profile" && redirect.fullPath != "/answer"){
-          return '/consulting';
-        }
+         if (token != null){
+           final authProvider = context.read<AuthProvider>();
+           final isSpecialist = await authProvider.isSpecialist() ;
+           if (isSpecialist && redirect.fullPath != "/profile" && redirect.fullPath != "/answer"){
+             return '/consulting';
+           }
+         } else{
+           return '/';
+         }
         return null;
       },
       routes: [

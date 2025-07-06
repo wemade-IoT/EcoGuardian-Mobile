@@ -8,8 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class QuestionList extends StatelessWidget {
-  final bool isSpecialist;
-  const QuestionList({super.key, required this.isSpecialist});
+  const QuestionList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +17,14 @@ class QuestionList extends StatelessWidget {
       shrinkWrap: true,
           itemCount: questionProvider.questionCount,
           itemBuilder: (BuildContext context, int index){
-            GestureDetector(
-                onTap: (){
-                  context.go("/answer",extra: questionProvider.questions[index].questionId );
-                },
+            return  GestureDetector(
+              onTap: (){
+                context.go("/answer",extra: questionProvider.questions[index].questionId );
+              },
                 child: QuestionCard(
                   questionDto:
                   questionProvider.questions[index]
-                ),
+                            ),
               );
           }
     );
