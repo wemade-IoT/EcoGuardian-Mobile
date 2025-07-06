@@ -1,6 +1,10 @@
 import 'package:ecoguardian/config/theme/app_theme.dart';
 import 'package:ecoguardian/profile/interface/providers/profile_provider.dart';
+import 'package:ecoguardian/public/interface/widgets/custom_elevated_button.dart';
+import 'package:ecoguardian/shared/infrastructure/helpers/storage_helper.dart';
+import 'package:ecoguardian/shared/interface/widgets/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -27,6 +31,16 @@ class ProfileScreen extends StatelessWidget {
                   _buildUserDetailsSection(context),
                   const SizedBox(height: 24),
                   _buildSubscriptionSection(),
+                  const SizedBox(height: 24),
+                  CustomElevatedButton(
+                      onPressed: () async{
+                        await StorageHelper.removeCredentials();
+                        context.go("/");
+                      },
+                      background: Colors.red,
+                      foreground: CustomColors.white,
+                      label:"Sign Out"
+                  ),
                   const SizedBox(height: 70),
                 ],
               ),

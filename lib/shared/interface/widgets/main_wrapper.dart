@@ -116,10 +116,6 @@ class _MainWrapperState extends State<MainWrapper> {
             width: 2,
           ),
           ),
-          child: GestureDetector(
-          onTap: () => {
-            context.go(Constant.initialPath),
-          },
           child: CircleAvatar(
             radius: 24.0,
             backgroundColor: Colors.white.withOpacity(0.2),
@@ -127,7 +123,6 @@ class _MainWrapperState extends State<MainWrapper> {
             profileProvider.profile != null ?   profileProvider.profile.avatarUrl
             : "https://www.pngitem.com/pimgs/m/421-4212617_person-placeholder-image-transparent-hd-png-download.png",
             ),
-          ),
           ),
         ),
         // Título centrado
