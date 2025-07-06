@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../iam/interface/providers/auth_provider.dart';
+
 class MainWrapper extends StatefulWidget {
   final Widget? child;
 
@@ -16,6 +18,17 @@ class MainWrapper extends StatefulWidget {
 }
 
 class _MainWrapperState extends State<MainWrapper> {
+  bool isSpecialist = false;
+  @override
+  void initState(){
+    super.initState();
+    final authProvider = context.read<AuthProvider>();
+    ()async{
+      isSpecialist = await authProvider.isSpecialist();
+      setState(() {
+      });
+    }();
+  }
   void _onIndexSelected(int index) {
     switch (index) {
       case 0:
@@ -36,6 +49,9 @@ class _MainWrapperState extends State<MainWrapper> {
       case 5:
         context.push(Constant.notificationsPath);
         break;
+      case 6:
+        context.push(Constant.answerPath);
+        break;
     }
   }
 
@@ -51,6 +67,7 @@ class _MainWrapperState extends State<MainWrapper> {
       Constant.paymentsPath: 3,
       Constant.profilePath: 4,
       Constant.notificationsPath: 5,
+      Constant.answerPath: 6,
     };
 
     final currentRoute =
@@ -117,8 +134,7 @@ class _MainWrapperState extends State<MainWrapper> {
           fontWeight: FontWeight.w600,
           ),
         ),
-        // Icono de notificaciones con círculo a la derecha
-        Container(
+         !isSpecialist  ? Container(
           decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.2),
           shape: BoxShape.circle,
@@ -131,7 +147,7 @@ class _MainWrapperState extends State<MainWrapper> {
           ),
           onPressed: () => _onIndexSelected(5),
           ),
-        ),
+        ) : Container(),
         ],
       ),
       centerTitle: true,

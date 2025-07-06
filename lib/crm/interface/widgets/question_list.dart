@@ -4,6 +4,7 @@ import 'package:ecoguardian/crm/interface/widgets/answer_form.dart';
 import 'package:ecoguardian/crm/interface/widgets/question_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class QuestionList extends StatelessWidget {
@@ -17,28 +18,14 @@ class QuestionList extends StatelessWidget {
       shrinkWrap: true,
           itemCount: questionProvider.questionCount,
           itemBuilder: (BuildContext context, int index){
-            return isSpecialist ?
-              GestureDetector(
-                onTap: () async{
-                  await showDialog(
-                      context: context,
-                      builder: (BuildContext context){
-                        return AnswerDialog(questionId: questionProvider.questions[index].questionId!);
-                      }
-                  );
+            GestureDetector(
+                onTap: (){
+                  context.go("/answer",extra: questionProvider.questions[index].questionId );
                 },
                 child: QuestionCard(
                   questionDto:
                   questionProvider.questions[index]
                 ),
-              ) :  GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (_) => AnswersScreen(questionId:questionProvider.questions[index].questionId!)));
-              },
-                child: QuestionCard(
-                  questionDto:
-                  questionProvider.questions[index]
-                            ),
               );
           }
     );

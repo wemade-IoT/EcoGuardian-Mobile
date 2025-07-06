@@ -1,3 +1,4 @@
+import 'package:ecoguardian/crm/interface/screens/answers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ecoguardian/analytics/interface/screens/home_screen.dart';
@@ -11,6 +12,9 @@ import 'package:ecoguardian/profile/interface/screens/profile_screen.dart';
 import 'package:ecoguardian/shared/infrastructure/helpers/storage_helper.dart';
 import 'package:ecoguardian/shared/interface/widgets/main_wrapper.dart';
 import 'package:ecoguardian/monitoring/domain/dto/plant.dto.dart';
+import 'package:provider/provider.dart';
+
+import '../../iam/interface/providers/auth_provider.dart';
 
 final appRouter = GoRouter(
   initialLocation: StorageHelper.getToken() != null ? '/home' : '/',
@@ -24,10 +28,15 @@ final appRouter = GoRouter(
       builder: (context, state, child) {
         return MainWrapper(child: child);
       },
-      redirect: (BuildContext context, _) async {
+      redirect: (BuildContext context, redirect) async {
         final token = await StorageHelper.getToken();
+        final authProvider = context.read<AuthProvider>();
+        final isSpecialist = await authProvider.isSpecialist();
         if (token == null) {
           return '/';
+        }
+        if (isSpecialist && redirect.fullPath != "/profile" && redirect.fullPath != "/answer"){
+          return '/consulting';
         }
         return null;
       },
@@ -45,7 +54,7 @@ final appRouter = GoRouter(
           path: '/monitoring',
           name: MonitoringScreen.name,
           pageBuilder:
-              (context, state) => NoTransitionPage(
+              (context, state)  => NoTransitionPage(
                 key: state.pageKey,
                 child: const MonitoringScreen(),
               ),
@@ -85,6 +94,17 @@ final appRouter = GoRouter(
             return NoTransitionPage(
               key: state.pageKey,
               child: InstallationScreen(plant: plant),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/answer',
+          name: "Answer Screen",
+          pageBuilder: (context, state) {
+            final questionId = state.extra as int;
+            return NoTransitionPage(
+              key: state.pageKey,
+              child: AnswersScreen(questionId: questionId),
             );
           },
         ),

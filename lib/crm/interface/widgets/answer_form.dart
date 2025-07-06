@@ -1,5 +1,6 @@
 import 'package:ecoguardian/crm/interface/screens/answers_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:ecoguardian/public/interface/widgets/custom_elevated_button.dart';
 import 'package:ecoguardian/public/interface/widgets/custom_text_field.dart';
@@ -71,7 +72,8 @@ class _AnswerDialogState extends State<AnswerDialog> {
                           final answerText = answerTextController.text;
                           try {
                             await answerProvider.createAnswer(specialistId!, answerText, widget.questionId);
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AnswersScreen(questionId: widget.questionId)));
+                            Navigator.pop(context);
+                            context.go("/consulting");
                           } catch (e) {
                             await showDialog(
                               context: context,

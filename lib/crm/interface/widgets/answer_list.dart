@@ -22,15 +22,17 @@ class _AnswerListState extends State<AnswerList> {
   @override
   Widget build(BuildContext context) {
     final answerProvider = context.watch<AnswerProvider>();
-    return  ListView.builder(
-        shrinkWrap: true,
-        itemCount: answerProvider.answersCount,
-        itemBuilder: (BuildContext context, int index){
-          return AnswerCard(
-                answerDto:
-               answerProvider.answers[index]!
-          );
-        }
+    return  Expanded(
+      child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: answerProvider.answersCount,
+          itemBuilder: (BuildContext context, int index){
+            return AnswerCard(
+                  answerDto:
+                 answerProvider.answers[index]!
+            );
+          }
+      ),
     );
   }
 }
