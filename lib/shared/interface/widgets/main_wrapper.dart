@@ -1,6 +1,7 @@
 import 'package:ecoguardian/config/constants/constant.dart';
 import 'package:ecoguardian/config/theme/app_theme.dart';
 import 'package:ecoguardian/profile/interface/providers/profile_provider.dart';
+import 'package:ecoguardian/shared/infrastructure/helpers/storage_helper.dart';
 import 'package:ecoguardian/shared/interface/widgets/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -50,7 +51,10 @@ class _MainWrapperState extends State<MainWrapper> {
         context.push(Constant.notificationsPath);
         break;
       case 6:
-        context.push(Constant.answerPath);
+        context.push(Constant.answerPath );
+        break;
+      case 7:
+        context.push(Constant.myAnswerPath );
         break;
     }
   }
@@ -68,6 +72,7 @@ class _MainWrapperState extends State<MainWrapper> {
       Constant.profilePath: 4,
       Constant.notificationsPath: 5,
       Constant.answerPath: 6,
+      Constant.myAnswerPath: 7,
     };
 
     final currentRoute =

@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../../config/theme/app_theme.dart';
+import '../providers/answer_provider.dart';
 import '../widgets/consumer_widget.dart';
 
 class ConsultingScreen extends StatefulWidget {
@@ -44,8 +45,11 @@ class _ConsultingScreenState extends State<ConsultingScreen> {
     ()async{
       isSpecialist = await authProvider.isSpecialist();
       isEnterprise = await authProvider.isEnterprise() || await authProvider.isAdmin();
+      final userId = await StorageHelper.getUserId();
+      print(userId);
       if(isSpecialist){
         Future.microtask(() => Provider.of<QuestionProvider>(context, listen: false).getQuestions());
+        Future.microtask(() => Provider.of<AnswerProvider>(context, listen: false).getAnswersBySpecialistId(userId!));
       }
     }();
   }
@@ -181,7 +185,6 @@ class _ConsultingScreenState extends State<ConsultingScreen> {
         selectedPlant > 0 ?
         QuestionList() :
         Container()
-
 
       ],
     );

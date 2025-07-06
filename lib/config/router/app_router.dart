@@ -1,4 +1,5 @@
 import 'package:ecoguardian/crm/interface/screens/answers_screen.dart';
+import 'package:ecoguardian/crm/interface/screens/my_answers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ecoguardian/analytics/interface/screens/home_screen.dart';
@@ -33,7 +34,7 @@ final appRouter = GoRouter(
          if (token != null){
            final authProvider = context.read<AuthProvider>();
            final isSpecialist = await authProvider.isSpecialist() ;
-           if (isSpecialist && redirect.fullPath != "/profile" && redirect.fullPath != "/answer"){
+           if (isSpecialist && redirect.fullPath != "/profile" && redirect.fullPath != "/answer" && redirect.fullPath != "/my-answer"){
              return '/consulting';
            }
          } else{
@@ -106,6 +107,16 @@ final appRouter = GoRouter(
             return NoTransitionPage(
               key: state.pageKey,
               child: AnswersScreen(questionId: questionId),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/my-answer',
+          name: "My Answer Screen",
+          pageBuilder: (context, state) {
+            return NoTransitionPage(
+              key: state.pageKey,
+              child: MyAnswersScreen(),
             );
           },
         ),

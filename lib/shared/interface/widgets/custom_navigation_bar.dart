@@ -48,7 +48,8 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
              !isSpecialist ? _buildNavIcon(Icons.home_rounded, 0, widget.onIndexSelected, widget.index) : Container(),
             !isSpecialist ? _buildNavIcon(Icons.monitor, 1, widget.onIndexSelected, widget.index) : Container(), // Planta
              _buildNavIcon(Icons.question_answer_outlined, 2, widget.onIndexSelected, widget.index), // Pregunta
-           _buildNavIcon(Icons.person_outline_rounded, 4, widget.onIndexSelected, widget.index)
+            isSpecialist ? _buildNavIcon(Icons.reply, 7, widget.onIndexSelected, widget.index) : Container(),
+           _buildNavIcon(Icons.person_outline_rounded, 4, widget.onIndexSelected, widget.index),
           ],
         ),
       ),

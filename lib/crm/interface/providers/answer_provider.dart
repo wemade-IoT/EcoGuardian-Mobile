@@ -30,4 +30,15 @@ class AnswerProvider extends ChangeNotifier{
       throw Exception("An error has ocurred while trying to create a answer $e");
     }
   }
+
+  Future<void> getAnswersBySpecialistId(int specialistId) async {
+    try{
+      final answerService = AnswerService(resourcePath: "questions/answers/specialist?specialistId=$specialistId");
+      final response = await answerService.getV2();
+      _answers = response.map((json) => AnswerDto.fromJson(json)).toList();
+      notifyListeners();
+    } catch (e){
+      throw Exception("An error has ocurred while trying to create a answer $e");
+    }
+  }
 }
