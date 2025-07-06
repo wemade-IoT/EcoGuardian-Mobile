@@ -1,5 +1,8 @@
 import 'package:ecoguardian/analytics/interface/providers/plant_metrics_provider.dart';
 import 'package:ecoguardian/analytics/domain/dto/plant_metrics.dto.dart';
+import 'package:ecoguardian/analytics/interface/widgets/consumption_line_chart.dart';
+import 'package:ecoguardian/config/theme/app_theme.dart';
+import 'package:ecoguardian/public/interface/widgets/custom_elevated_button.dart';
 import 'package:ecoguardian/shared/interface/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +13,6 @@ import '../../../planning/interface/providers/device_provider.dart';
 import '../../../profile/interface/providers/notification_provider.dart';
 import '../../../profile/interface/providers/profile_provider.dart';
 import '../../../shared/infrastructure/helpers/date_helper.dart';
-import '../widgets/consumption_line_chart.dart';
 import '../widgets/plant_metric_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int selectedPlant = 0;
+  int indexPeriodSelected = 0;
 
   Map<int,double> records = {
     1: 0.0,
@@ -31,8 +34,16 @@ class _HomeScreenState extends State<HomeScreen> {
     3: 0.0,
     4: 0.0
   };
+
+  final List<String> periods= [
+    "hourly",
+    "daily",
+    "weekly",
+    "monthly",
+    "yearly"
+  ];
   List<dynamic> devices = [];
-  String labels = "";
+  List<String> labels = [];
   List<dynamic> latestMetrics = [];
 
   List<FlSpot> waterData = [];
@@ -42,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> assignDevices(int plantId, BuildContext context) async {
     devices = [];
-    final deviceProvider = Provider.of<DeviceProvider>(context, listen: false);
    try{
+     final deviceProvider = Provider.of<DeviceProvider>(context, listen: false);
      final data = await deviceProvider.getDevicesByPlantId(plantId);
      devices.add(data);
    } catch (e){
@@ -51,67 +62,65 @@ class _HomeScreenState extends State<HomeScreen> {
    }
   }
 
-  Future<void> getLatestMetrics(BuildContext context) async {
-        final metricProvider = Provider.of<PlantMetricsProvider>(context, listen: false);
-        final deviceList = devices.last;
-        humidityData = [];
-        lightData = [];
-        temperatureData = [];
-        waterData = [];
-        labels = "";
-        try {
-          MetricRegistryDto metricRecords = await metricProvider.fetchLatestMetrics(deviceList.last.id);
-          if (metricRecords.metrics != null && metricRecords.metrics!.isNotEmpty) {
-            labels = normalizeDate(metricRecords.createdAt!);
-            for (var metric in metricRecords.metrics!) {
+
+  Future<void> getLatestMetrics(BuildContext context, String period) async {
+    final metricProvider = Provider.of<PlantMetricsProvider>(context, listen: false);
+    final deviceList = devices.last;
+    humidityData = [];
+    lightData = [];
+    temperatureData = [];
+    waterData = [];
+    labels = [];
+    try {
+      for (var device in deviceList){
+        List<MetricRegistryDto> metricRecords = await metricProvider.fetchMetrics(device.id,period);
+        for (var metricRecord in metricRecords){
+          if (metricRecord.metrics != null && metricRecord.metrics!.isNotEmpty) {
+            labels.add(normalizeDate(metricRecord.createdAt!));
+            for (var metric in metricRecord.metrics!) {
               if (metric.metricTypesId == 1) {
-                  humidityData.add(FlSpot(0, metric.metricValue!));
+                humidityData.add(FlSpot(0,0));
+                humidityData.add(FlSpot(0, metric.metricValue!));
               }
               if (metric.metricTypesId == 2) {
-                  lightData.add(FlSpot(10,  metric.metricValue!));
+               lightData.add(FlSpot(0,0));
+                lightData.add(FlSpot(10,  metric.metricValue!));
               }
               if (metric.metricTypesId == 3) {
-                 temperatureData.add(FlSpot(2, metric.metricValue!));
+                temperatureData.add(FlSpot(0,0));
+                temperatureData.add(FlSpot(2, metric.metricValue!));
               }
               if (metric.metricTypesId == 4) {
-                  waterData.add(FlSpot(4, metric.metricValue!));
+                waterData.add(FlSpot(0,0));
+                waterData.add(FlSpot(4, metric.metricValue!));
               }
             }
           } else {
             throw Exception('No metrics available for device ${deviceList.last.id}');
           }
-        } catch (e) {
-          throw Exception("An error has ocurred whilwe trying to fecth latest metrics by device id ${deviceList.last.id}: $e");
         }
+      }
+    } catch (e) {
+      throw Exception("An error has ocurred whilwe trying to fecth latest metrics by device id ${deviceList.last.id}: $e");
+    }
   }
+
 
 
   Future<void> matchMetricsByDevice(Map<int, double> records, BuildContext context) async {
       final metricProvider = Provider.of<PlantMetricsProvider>(context, listen: false);
-      Map<int, double> metricSums = {};
-      Map<int, int> metricCounts = {};
+      final device = devices.last;
       records.clear();
-      for (var deviceList in devices) {
-        for (var device in deviceList) {
-          try {
-            List<MetricRegistryDto> metricRecords = await metricProvider.fetchMetrics(device.id);
-
-            for (var record in metricRecords) {
-              for (var metric in record.metrics!) {
-                int metricTypeId = metric.metricTypesId!;
-                double metricValue = metric.metricValue?.toDouble() ?? 0;
-                metricSums[metricTypeId] = (metricSums[metricTypeId] ?? 0) + metricValue;
-                metricCounts[metricTypeId] = (metricCounts[metricTypeId] ?? 0) + 1;
-              }
-            }
-          } catch (e) {
-            throw Exception("An error has ocurred while trying to fecth metrics by device ${device.id}: $e");
+      for (var item in device){
+        try {
+          MetricRegistryDto metricRecords = await metricProvider.fetchLatestMetrics(item.id);
+          for (var metric in metricRecords.metrics!) {
+            int metricTypeId = metric.metricTypesId!;
+            double metricValue = metric.metricValue?.toDouble() ?? 0;
+            records[metricTypeId] = metricValue;
           }
-        }
-      }
-      for (var metricTypeId in metricSums.keys) {
-        if (metricCounts[metricTypeId]! > 0) {
-          records[metricTypeId] = metricSums[metricTypeId]! / metricCounts[metricTypeId]!;
+        } catch (e) {
+          throw Exception("An error has ocurred while trying to fecth metrics by device ${item.id}: $e");
         }
       }
   }
@@ -149,7 +158,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> buildMetricCards(Map<int, double> records) {
     List<Widget> cards = [];
-
     for (var entry in records.entries) {
       final metricId = entry.key;
       final value = entry.value;
@@ -170,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
-    return cards;
+    return cards ;
   }
 
 
@@ -197,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const Padding(
                 padding: EdgeInsets.only(bottom: 8.0),
                 child: Text(
-                  'Check your latest record and average consumption',
+                  'Check your latest data',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -205,6 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   textAlign: TextAlign.center,
                 ),
               ),
+              const SizedBox(height: 10),
               CustomDropdown(
                   initialValue: selectedPlant,
                   options: plantProvider.plants,
@@ -219,11 +228,10 @@ class _HomeScreenState extends State<HomeScreen> {
                      }
                     if (devices.isNotEmpty) {
                       setState(() {
-
                       });
                       await Future.wait([
                         matchMetricsByDevice(records, context),
-                        getLatestMetrics(context),
+                        getLatestMetrics(context, "hourly")
                       ]);
                       setState(() {
 
@@ -233,34 +241,67 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                 },
               ),
-              const SizedBox(height: 20),
-              ConsumptionLineChart(
-                waterData: waterData,
-                label: labels,
-                temperatureData: temperatureData,
-                lightData: lightData,
-                humidityData: humidityData,
-              ),
               const SizedBox(height: 24),
               Consumer<PlantMetricsProvider>(
                 builder: (context, provider, _) {
                   if (provider.isLoading) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (waterData.isNotEmpty  || lightData.isNotEmpty  || temperatureData.isNotEmpty || humidityData.isNotEmpty) {
+                  } else if (records.isNotEmpty) {
                     return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children:  buildMetricCards(records)
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children:  buildMetricCards(records)
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            'Do you want to see more information?',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                        ),
+                        CustomElevatedButton(
+                            onPressed: (){},
+                            background: CustomColors.primary,
+                            foreground: CustomColors.white,
+                            label: "Visit our WebPage"
+                        )
+                      ],
                     );
                   }
-                  return const Center(
-                    child: Text(
-                        "No metrics available!",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 15,
+                    children: [
+                      const  Text(
+                            "No analytics data available.",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      const Text(
+                          "If you have already registered a plant and you can read this message",
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                      const Text(
+                        "Contact our support team",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red
+                        ),
+                        textAlign: TextAlign.center,
+                      )
+
+                    ],
                   );
                 },
               ),

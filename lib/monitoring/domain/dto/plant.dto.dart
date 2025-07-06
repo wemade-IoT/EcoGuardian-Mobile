@@ -41,7 +41,7 @@ class PlantDto with Serializable {
     return PlantDto(
       id: json["id"],
       name: json["name"],
-      imageUrl: json["imageUrl"],
+      imageUrl: json["image"],
       type: json["type"],
       isPlantation: json["isPlantation"],
       areaCoverage: json["areaCoverage"],

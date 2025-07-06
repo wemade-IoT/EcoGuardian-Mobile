@@ -34,14 +34,14 @@ class ConsumptionLineChart extends StatelessWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   getTitlesWidget: (value, meta) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          label,
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                      );
-                    },
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        label,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    );
+                  },
                   interval: 1,
                   reservedSize: 32,
                 ),

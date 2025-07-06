@@ -241,7 +241,6 @@ class _PlantDialogState extends State<PlantDialog> {
                             );
                           }
                         } else {
-                          if (plantProvider.plants.length > 5) {
                             final newPlantInformation = PlantDto(
                               name: nameController.text,
                               id: 0,
@@ -286,59 +285,6 @@ class _PlantDialogState extends State<PlantDialog> {
 
                             return;
                           }
-
-                          final userId = await StorageHelper.getUserId();
-                          final newPlantInformation = PlantDto(
-                            name: nameController.text,
-                            id: 0,
-                            type: typeController.text,
-                            image: plantImageFile,
-                            isPlantation: false,
-                            areaCoverage:
-                                !isEnterprise
-                                    ? 0
-                                    : int.parse(areaCoverageController.text),
-                            userId: userId!,
-                            waterThreshold: int.parse(
-                              waterThresholdController.text,
-                            ),
-                            temperatureThreshold: int.parse(
-                              temperatureThresholdController.text,
-                            ),
-                            lightThreshold: int.parse(
-                              lightThresholdController.text,
-                            ),
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now(),
-                            stateId: 1,
-                          );
-                          try {
-                            await plantProvider.createPlant(
-                              newPlantInformation,
-                            );
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Plant created successfully'),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
-                          } catch (e) {
-                            await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return CustomDialog(
-                                  title: "An error has ocurred",
-                                  content:
-                                      "An error has ocurred while trying to register your plant, please try again",
-                                  isSuccess: false,
-                                  onConfirm: () {},
-                                  onCancel: () {},
-                                );
-                              },
-                            );
-                          }
-                        }
                       },
                       background: CustomColors.primary,
                       foreground: Colors.white,

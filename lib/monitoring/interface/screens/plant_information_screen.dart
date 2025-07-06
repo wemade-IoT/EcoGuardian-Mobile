@@ -1,10 +1,8 @@
 import 'package:ecoguardian/config/theme/app_theme.dart';
 import 'package:ecoguardian/monitoring/domain/dto/plant.dto.dart';
 import 'package:ecoguardian/monitoring/interface/widgets/plant_dialog.dart';
-import 'package:ecoguardian/monitoring/interface/widgets/plant_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class PlantInformationScreen extends StatelessWidget {
   final PlantDto plantDto;
@@ -14,50 +12,193 @@ class PlantInformationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
         child: Card(
           color: CustomColors.lightGreen,
-          child: Container(
-            height: 350,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          elevation: 10, // Sombra para profundidad
+          child: Padding(
+            padding: const EdgeInsets.all(20),
             child: Column(
-              spacing: 20,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PlantSection(label: "Name", value: plantDto.name),
-                PlantSection(label: "Type", value: plantDto.type),
-                PlantSection(label: "WaterThreshold", value: plantDto.waterThreshold.toString()),
-                PlantSection(label: "LightThreshold", value:plantDto.lightThreshold.toString()),
-                PlantSection(label: "TemperatureThreshold", value: plantDto.temperatureThreshold.toString()),
-                PlantSection(label: "Created at:", value: DateFormat('dd/MM/yyyy').format(plantDto.createdAt)),
-                PlantSection(label: "Last Update:", value: DateFormat('dd/MM/yyyy').format(plantDto.createdAt)),
-                SizedBox(
-                  width: double.infinity,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: CustomColors.primary,
-                      borderRadius: BorderRadius.circular(15)
-                    ),
-                    child: IconButton(
-                      color: Colors.white,
-                        onPressed: () async{
-                          await showDialog(
-                              context: context,
-                              builder: (BuildContext context){
-                                return PlantDialog(plant: plantDto);
-                              }
-                          );
-                    },
-                        icon: Icon(Icons.edit)
-                    ),
-                  )
-                )
+                // Imagen de la planta (usamos la URL proporcionada)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.network(
+                   plantDto.imageUrl!,
+                    height: 150,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(height: 20), // Espaciado entre imagen y título
 
+                // Título de la información
+                Text(
+                  "Plant Information",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: CustomColors.darkGreen,
+                  ),
+                ),
+                SizedBox(height: 10),
+
+                // Nombre de la planta con icono
+                Text(
+                  "Name: Nekpuerkito",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: CustomColors.darkGreen,
+                  ),
+                ),
+                SizedBox(height: 10),
+
+                // Tipo de planta con icono
+                Text(
+                  "Type: Nut Plant",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: CustomColors.darkGreen,
+                  ),
+                ),
+                SizedBox(height: 10),
+
+                // Area de cobertura
+                Row(
+                  children: [
+                    Icon(Icons.map, color: CustomColors.darkGreen),
+                    SizedBox(width: 5),
+                    Text(
+                      "Area Coverage: 1000 km",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.darkGreen,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20), // Espaciado
+
+                // Current Thresholds (usamos un Row para las secciones de thresholds)
+                Text(
+                  "Current Thresholds",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: CustomColors.darkGreen,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Column(
+                  spacing: 10,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _buildThresholdRow(Icons.water, "Humidity", "12%"),
+                    _buildThresholdRow(Icons.thermostat, "Temperature", "12°C"),
+                    _buildThresholdRow(Icons.lightbulb, "Light", "12%"),
+                  ],
+                ),
+                SizedBox(height: 30), // Espaciado
+
+                // Información de actividad
+                Text(
+                  "Activity",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: CustomColors.darkGreen,
+                  ),
+                ),
+                SizedBox(height: 10),
+
+                // Fechas de actividad
+                Text(
+                  "Added At: Jul 5, 2025, 06:10 AM",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: CustomColors.grey,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Last Updated: Jul 6, 2025, 03:06 PM",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: CustomColors.grey,
+                  ),
+                ),
+                SizedBox(height: 30),
+
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return PlantDialog(plant: plantDto);
+                        },
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, backgroundColor: CustomColors.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 30),
+                      elevation: 5,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.edit, color: Colors.white, size: 18),
+                        SizedBox(width: 10),
+                        Text(
+                          'Edit',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildThresholdRow(IconData icon, String label, String value) {
+    return  Row(
+        children: [
+          Icon(icon, color: CustomColors.darkGreen),
+          SizedBox(width: 5),
+          Text(
+            "$label: $value",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: CustomColors.darkGreen,
+            ),
+          ),
+        ],
     );
   }
 }

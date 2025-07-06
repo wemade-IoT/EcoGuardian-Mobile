@@ -4,10 +4,10 @@ import 'package:ecoguardian/analytics/infrastructure/services/plant_metrics_serv
 
 class PlantMetricsProvider extends ChangeNotifier {
   bool isLoading = false;
-  Future<List<MetricRegistryDto>> fetchMetrics(int deviceId) async {
+  Future<List<MetricRegistryDto>> fetchMetrics(int deviceId, String period) async {
     isLoading = true;
    try{
-     final service = PlantMetricsService(resourcePath: 'metric-registry?deviceId=$deviceId&period=hourly');
+     final service = PlantMetricsService(resourcePath: 'metric-registry?deviceId=$deviceId&period=$period');
      final response = await service.getByParam();
      isLoading = false;
      notifyListeners();

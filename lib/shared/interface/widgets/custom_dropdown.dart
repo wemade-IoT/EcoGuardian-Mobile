@@ -2,13 +2,15 @@ import 'package:ecoguardian/monitoring/domain/dto/plant.dto.dart';
 import 'package:flutter/material.dart';
 
 class CustomDropdown extends StatefulWidget {
-  final List<PlantDto> options;
+  final List<PlantDto>? options;
+  final List<String>?periods;
   final int? initialValue;
   final void Function(int?)? onChanged;
 
   const CustomDropdown({
     super.key,
-    required this.options,
+    this.options,
+    this.periods,
     this.initialValue,
     this.onChanged,
   });
@@ -34,17 +36,27 @@ class _CustomDropdownState extends State<CustomDropdown> {
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: DropdownButton<int>(
+      child: DropdownButton<dynamic>(
         value: selectedValue,
         isExpanded: true,
         underline: const SizedBox(),
         icon: const Icon(Icons.arrow_drop_down),
-        items: widget.options.map((option) {
+        items: widget.options != null ?
+        widget.options!.map((option) {
           return DropdownMenuItem(
             value: option.id,
             child: Text(option.name),
           );
-        }).toList(),
+        }).toList() :
+        (widget.periods != null ?
+        List.generate(widget.periods!.length, (index) {
+          return DropdownMenuItem(
+            value: index,
+            child: Text(widget.periods![index]),
+          );
+        }) :
+        <DropdownMenuItem>[]
+        ),
         onChanged: (newValue) {
           setState(() {
             selectedValue = newValue;
