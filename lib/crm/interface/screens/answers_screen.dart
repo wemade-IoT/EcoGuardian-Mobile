@@ -1,11 +1,13 @@
 import 'package:ecoguardian/config/theme/app_theme.dart';
 import 'package:ecoguardian/crm/interface/providers/answer_provider.dart';
 import 'package:ecoguardian/crm/interface/widgets/answer_list.dart';
+import 'package:ecoguardian/iam/interface/providers/auth_provider.dart';
 import 'package:ecoguardian/public/interface/widgets/custom_elevated_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../shared/infrastructure/helpers/storage_helper.dart';
 import '../widgets/answer_form.dart';
 
 class AnswersScreen extends StatefulWidget {
@@ -18,9 +20,17 @@ class AnswersScreen extends StatefulWidget {
 }
 
 class _AnswersScreenState extends State<AnswersScreen> {
+  bool isSpecialist = false;
   @override
   void initState(){
     super.initState();
+    ()async{
+      final authProvider = context.read<AuthProvider>();
+      isSpecialist = await authProvider.isSpecialist();
+      setState(() {
+
+      });
+    }();
     Future.microtask(() => Provider.of<AnswerProvider>(context, listen: false).getAnswersByQuestionId(widget.questionId!));
   }
 
@@ -41,7 +51,7 @@ class _AnswersScreenState extends State<AnswersScreen> {
                      AnswerList(
                        answers: answerProvider.answers,
                      ),
-                      CustomElevatedButton(
+                      isSpecialist ? CustomElevatedButton(
                           onPressed: ()async{
                             await showDialog(
                               context: context,
@@ -54,7 +64,7 @@ class _AnswersScreenState extends State<AnswersScreen> {
                           background: CustomColors.primary,
                           foreground: CustomColors.white,
                           label: "Submit answer"
-                      ),
+                      ) : Container(),
                       const SizedBox(height: 80)
                     ]
                 ),

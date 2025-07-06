@@ -49,6 +49,7 @@ dependencies:
   fl_chart: ^1.0.0
   image_picker: ^0.8.4+6
   dart_jsonwebtoken: ^2.0.0
+  firebase_in_app_messaging: ^0.8.1+9
 
 dev_dependencies:
   fl_chart: ^1.0.0

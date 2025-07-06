@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 class PlantProvider extends ChangeNotifier{
    List<PlantDto> _plants = [];
    PlantDto? selectedPlant;
-   PlantService plantService = PlantService(resourcePath: "plant");
+   PlantService plantService = PlantService(resourcePath: "plants");
    get plants => _plants;
 
    Future<void> getPlantsByUserId() async{

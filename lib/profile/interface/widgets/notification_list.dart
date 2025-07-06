@@ -11,7 +11,16 @@ class NotificationList extends StatelessWidget {
     final notificationProvider = context.watch<NotificationProvider>();
 
     if (notificationProvider.notificationsCount == 0) {
-      return const Center(child: Text("No notifications available"));
+      return const Center(
+          child: Text(
+              "No notifications available",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          )
+      );
     }
 
     return ListView.builder(
