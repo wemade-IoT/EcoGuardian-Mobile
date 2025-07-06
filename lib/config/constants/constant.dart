@@ -1,6 +1,6 @@
 class Constant {
   static bool isProduction = false;
-  static const String baseUrl = 'http://10.0.2.2:9080/api/v1/';
+  static const String baseUrl = 'https://ecoguardian-cgenhdd6dadrgbfz.brazilsouth-01.azurewebsites.net/api/v1/';
 
   // auth related routes
   static const String initialPath = '/';

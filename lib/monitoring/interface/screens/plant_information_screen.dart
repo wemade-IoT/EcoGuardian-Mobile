@@ -1,6 +1,7 @@
 import 'package:ecoguardian/config/theme/app_theme.dart';
 import 'package:ecoguardian/monitoring/domain/dto/plant.dto.dart';
 import 'package:ecoguardian/monitoring/interface/widgets/plant_dialog.dart';
+import 'package:ecoguardian/shared/infrastructure/helpers/date_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -51,7 +52,7 @@ class PlantInformationScreen extends StatelessWidget {
 
                 // Nombre de la planta con icono
                 Text(
-                  "Name: Nekpuerkito",
+                  "Name: ${plantDto.name}",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -62,7 +63,7 @@ class PlantInformationScreen extends StatelessWidget {
 
                 // Tipo de planta con icono
                 Text(
-                  "Type: Nut Plant",
+                  "Type: ${plantDto.type}",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -77,7 +78,7 @@ class PlantInformationScreen extends StatelessWidget {
                     Icon(Icons.map, color: CustomColors.darkGreen),
                     SizedBox(width: 5),
                     Text(
-                      "Area Coverage: 1000 km",
+                      "Area Coverage: ${plantDto.areaCoverage} km",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -103,9 +104,9 @@ class PlantInformationScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    _buildThresholdRow(Icons.water, "Humidity", "12%"),
-                    _buildThresholdRow(Icons.thermostat, "Temperature", "12°C"),
-                    _buildThresholdRow(Icons.lightbulb, "Light", "12%"),
+                    _buildThresholdRow(Icons.water, "Humidity", "${plantDto.waterThreshold}%"),
+                    _buildThresholdRow(Icons.thermostat, "Temperature", "${plantDto.temperatureThreshold}°C"),
+                    _buildThresholdRow(Icons.lightbulb, "Light", "${plantDto.temperatureThreshold}%"),
                   ],
                 ),
                 SizedBox(height: 30), // Espaciado
@@ -123,7 +124,7 @@ class PlantInformationScreen extends StatelessWidget {
 
                 // Fechas de actividad
                 Text(
-                  "Added At: Jul 5, 2025, 06:10 AM",
+                  "Added At: ${formatDate(plantDto.createdAt)}",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
@@ -132,7 +133,7 @@ class PlantInformationScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "Last Updated: Jul 6, 2025, 03:06 PM",
+                  "Last Updated: ${formatDate(plantDto.updatedAt!)} ",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,

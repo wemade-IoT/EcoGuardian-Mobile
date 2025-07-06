@@ -246,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context, provider, _) {
                   if (provider.isLoading) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (records.isNotEmpty) {
+                  } else if (records.isNotEmpty && devices.isNotEmpty) {
                     return Column(
                       children: [
                         Column(
