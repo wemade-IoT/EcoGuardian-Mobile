@@ -8,6 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../widgets/password_field.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,6 +23,13 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final Uri _url = Uri.parse('https://ecoguardian-tf.vercel.app/login');
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +136,33 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 25),
+                        const Text("Do you don't registered yet?"),
+                        const SizedBox(height: 25),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await _launchUrl();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                            CustomColors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            minimumSize: const Size(double.infinity, 0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                          ),
+                          child: const Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              color: CustomColors.primary,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.8,
+                            ),
+                          ),
+                        ),
+
                       ],
                     ),
                   ),
