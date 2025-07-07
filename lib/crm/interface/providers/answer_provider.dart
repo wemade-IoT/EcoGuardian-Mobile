@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 class AnswerProvider extends ChangeNotifier{
   List<AnswerDto> _answers = [];
   get answers => _answers;
+  void clearAnswers (){
+    _answers = [];
+    notifyListeners();
+  }
   get answersCount => _answers.length;
 
   Future<void> createAnswer(int specialistId, String answerText, int questionId) async{
@@ -27,6 +31,8 @@ class AnswerProvider extends ChangeNotifier{
       _answers = response.map((json) => AnswerDto.fromJson(json)).toList();
       notifyListeners();
     } catch (e){
+      _answers = [];
+      notifyListeners();
       throw Exception("An error has ocurred while trying to create a answer $e");
     }
   }
