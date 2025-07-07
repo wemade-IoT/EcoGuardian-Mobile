@@ -14,23 +14,23 @@ class MyAnswersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final answerProvider = context.watch<AnswerProvider>();
     return Scaffold(
-      body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Expanded(
-            child: Column(
-                children: [
-                  const Text(
-                    'My Answers Screen',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  const SizedBox(height: 20),
-                  AnswerList(
-                     answers: answerProvider.answers,
-                  ),
-                  const SizedBox(height: 80)
-                ]
-            ),
-          )
+      body: SingleChildScrollView(
+        child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child:  Column(
+                  children: [
+                    const Text(
+                      'My Answers Screen',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    const SizedBox(height: 20),
+                    AnswerList(
+                       answers: answerProvider.answers,
+                    ),
+                    const SizedBox(height: 80)
+                  ]
+              ),
+        ),
       ),
     );
   }

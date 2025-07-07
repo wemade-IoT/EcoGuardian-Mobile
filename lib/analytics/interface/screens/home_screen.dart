@@ -7,6 +7,7 @@ import 'package:ecoguardian/shared/interface/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../monitoring/interface/providers/plant_provider.dart';
 import '../../../planning/interface/providers/device_provider.dart';
@@ -27,6 +28,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int selectedPlant = 0;
   int indexPeriodSelected = 0;
+  final Uri _url = Uri.parse('https://ecoguardian-tf.vercel.app/login');
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
 
   Map<int,double> records = {
     1: 0.0,
@@ -265,7 +273,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                         ),
                         CustomElevatedButton(
-                            onPressed: (){},
+                            onPressed: () async{
+                              await _launchUrl();
+                            },
                             background: CustomColors.primary,
                             foreground: CustomColors.white,
                             label: "Visit our WebPage"

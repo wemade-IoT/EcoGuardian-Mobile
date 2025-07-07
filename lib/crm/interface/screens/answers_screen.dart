@@ -38,38 +38,38 @@ class _AnswersScreenState extends State<AnswersScreen> {
   Widget build(BuildContext context) {
     final answerProvider = context.watch<AnswerProvider>();
     return Scaffold(
-        body: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Expanded(
+        body: SingleChildScrollView(
+          child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
-                    children: [
-                      const Text(
-                        'Answers Screen',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      const SizedBox(height: 20),
-                     AnswerList(
-                       answers: answerProvider.answers,
-                     ),
-                      isSpecialist ? CustomElevatedButton(
-                          onPressed: ()async{
-                            await showDialog(
-                              context: context,
-                              builder: (BuildContext context){
-                                return AnswerDialog(questionId: widget.questionId! );
-                              }
-                            );
-
-                          },
-                          background: CustomColors.primary,
-                          foreground: CustomColors.white,
-                          label: "Submit answer"
-                      ) : Container(),
-                      const SizedBox(height: 80)
-                    ]
-                ),
-              )
-          ),
+                      children: [
+                        const Text(
+                          'Answers Screen',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                        const SizedBox(height: 20),
+                       AnswerList(
+                         answers: answerProvider.answers,
+                       ),
+                        isSpecialist ? CustomElevatedButton(
+                            onPressed: ()async{
+                              await showDialog(
+                                context: context,
+                                builder: (BuildContext context){
+                                  return AnswerDialog(questionId: widget.questionId! );
+                                }
+                              );
+          
+                            },
+                            background: CustomColors.primary,
+                            foreground: CustomColors.white,
+                            label: "Submit answer"
+                        ) : Container(),
+                        const SizedBox(height: 80)
+                      ]
+                  ),
+            ),
+        ),
     );
   }
 }

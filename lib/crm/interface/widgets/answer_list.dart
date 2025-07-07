@@ -21,8 +21,7 @@ class _AnswerListState extends State<AnswerList> {
   }
   @override
   Widget build(BuildContext context) {
-    return  Expanded(
-      child: ListView.builder(
+    return  ListView.builder(
           shrinkWrap: true,
           itemCount:widget.answers.length,
           itemBuilder: (BuildContext context, int index){
@@ -31,7 +30,6 @@ class _AnswerListState extends State<AnswerList> {
                  widget.answers[index]
             );
           }
-      ),
     );
   }
 }
